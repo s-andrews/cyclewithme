@@ -13,9 +13,14 @@
             "stop": "Wilde and Greene",
             "leader": "Judy",
             "spaces": "10",
+            "lat": "52.27722117837096",
+            "lon": "0.4428597805954155",
             "joined" : [
-                "Judy Brown",
-                "Rich Olivey"
+                "Judy",
+                "Rich",
+                "Nigel",
+                "Martin",
+                "Chris"
             ]
         },
         {
@@ -29,8 +34,12 @@
             "stop": "Saffron Walden Market Place",
             "leader": "Simon",
             "spaces": "10",
+            "lat": "52.15231006196024",
+            "lon": "0.2618071877055751",
             "joined" : [
-                "Simon Andrews"
+                "Simon",
+                "Dan",
+                "Terry"
             ]
         }
     ]

@@ -83,7 +83,7 @@ function update_ride(json) {
         </div>
     </div>
         `)
-        load_map(route.number)
+        load_map(route.number, route.lat, route.lon)
     }
 
     // Enable the popovers for the list of riders
@@ -92,7 +92,7 @@ function update_ride(json) {
 }
 
 
-function load_map(route_number) {
+function load_map(route_number, lat, lon) {
 
     console.log("Loading map for route "+route_number)
 
@@ -102,8 +102,8 @@ function load_map(route_number) {
 
     let fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
     let toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
-    let position       = new OpenLayers.LonLat(0.32,52.27).transform( fromProjection, toProjection);
-    let zoom           = 12; 
+    let position       = new OpenLayers.LonLat(lon,lat).transform( fromProjection, toProjection);
+    let zoom           = 10; 
 
     map.addLayer(mapnik);
 
