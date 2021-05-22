@@ -33,7 +33,17 @@ function update_ride(json) {
     
     // Parse the json to populate the page.
     $("#eventtitle").html(json.name)
-    $("#eventdate").html(json.date)
+
+    // Format the date nicely
+    date_sections = json.date.split("-")
+    // We subtract 1 from the month as they are zero indexed for some stupid reason
+    let d = new Date(date_sections[0], date_sections[1]-1, date_sections[2]);
+    let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+    let mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d);
+    let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+    let wd = new Intl.DateTimeFormat('en', { weekday: 'long' }).format(d);
+
+    $("#eventdate").html(`${wd}, ${da} ${mo}, ${ye}`)
 
     // Clear any existing route data
     $("#routes").html("")
@@ -57,7 +67,7 @@ function update_ride(json) {
                                 <li><strong>Pace:</strong> ${route.pace}</li>
                                 <li><strong>Stop: </strong> ${route.stop}</li>
                                 <li><strong>Leader:</strong> ${route.leader}</li>
-                                <li><strong>Spaces:</strong> ${route.spaces} (${route.joined.length} taken)</li>
+                                <li><strong>Spaces:</strong> ${route.spaces} total, ${route.joined.length} taken <button type="button" class="btn btn-sm btn-secondary" data-html="true" data-container="body" data-toggle="popover" data-placement="right" data-content="${route.joined.join("<br>")}">Who?</button></li>
                             </ul>
                             <div class="text-center">
                                 <a href="#" class="btn btn-primary signup">Sign up</a>
@@ -76,6 +86,8 @@ function update_ride(json) {
         load_map(route.number)
     }
 
+    // Enable the popovers for the list of riders
+    $('[data-toggle="popover"]').popover()
 
 }
 

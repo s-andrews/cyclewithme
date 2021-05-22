@@ -38,3 +38,10 @@ a.signup {
 #footer a {
     color: black;
 }
+
+/* Who buttons */
+.btn-sm {
+    padding:0;
+    padding-left: 0.2em;
+    padding-right: 0.2em;
+}
