@@ -1,0 +1,37 @@
+{
+    "name": "BCC Sunday Club Ride",
+    "date": "2020-05-23",
+    "routes" : [
+        {
+            "number": "1",
+            "name": "Club ride to Tuddenham",
+            "description" : "A mostly flat route taken at a steady pace",
+            "start_time": "09:00",
+            "departs": "Burwell Primary School",
+            "distance" : "30",
+            "pace": "Steady (~15mph)",
+            "stop": "Wilde and Greene",
+            "leader": "Judy",
+            "spaces": "10",
+            "joined" : [
+                "Judy Brown",
+                "Rich Olivey"
+            ]
+        },
+        {
+            "number": "2",
+            "name": "Longer ride to Saffron Walden",
+            "description" : "A more challenging route with distance and elevation",
+            "start_time": "09:00",
+            "departs": "Burwell Primary School",
+            "distance" : "50",
+            "pace": "Pushing on (~17mph)",
+            "stop": "Saffron Walden Market Place",
+            "leader": "Simon",
+            "spaces": "10",
+            "joined" : [
+                "Simon Andrews"
+            ]
+        }
+    ]
+}
