@@ -1,0 +1,17 @@
+/* Put some spacing between the route cards */
+.card {
+    margin-top: 2em;
+}
+
+
+/* Make the route images expand to fill the container width */
+img.route {
+    width: 100%;
+}
+
+/* Make the signup buttons wider */
+a.signup {
+    padding-left: 3em;
+    padding-right: 3em;
+    margin: 1em;
+}
