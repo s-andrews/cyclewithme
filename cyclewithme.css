@@ -27,3 +27,14 @@ a.signup {
     top: 0;
     right: 0;
 }
+
+/* Footer */
+#footer {
+    margin-top: 2em;
+    padding: 1em;
+    background-color: lightgrey;
+}
+
+#footer a {
+    color: black;
+}
