@@ -111,7 +111,7 @@ function load_map(route_number, lat, lon) {
     let lgpx = new OpenLayers.Layer.Vector("Route", {
         strategies: [new OpenLayers.Strategy.Fixed()],
         protocol: new OpenLayers.Protocol.HTTP({
-            url: "/rides/"+ride_id+"/route"+route_number+".gpx",
+            url: "/cgi-bin/cwm_backend.py?action=gpx&ride_id="+ride_id+"&route="+route_number,
             format: new OpenLayers.Format.GPX()
         }),
         style: {strokeColor: "red", strokeWidth: 5, strokeOpacity: 0.5},

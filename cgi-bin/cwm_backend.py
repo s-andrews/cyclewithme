@@ -2,9 +2,34 @@
 import os.path
 from xml.dom.minidom import parse
 import xml.dom.minidom
+import cgi
+import cgitb
+cgitb.enable()
 
 def main():
-    get_average_lon_lat_from_gpx("EXAMPLEIDWILLBERANDOM",2)
+    # get_average_lon_lat_from_gpx("EXAMPLEIDWILLBERANDOM",2)
+    form = cgi.FieldStorage()
+    if form["action"].value == "gpx":
+        get_gpx(form["ride_id"].value,form["route"].value)
+
+    else:
+        print("Didn't understand action "+form["action"].value)
+
+def get_gpx(ride_id, route_number):
+    gpx_file = os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "rides",
+        ride_id,
+        f"route{route_number}.gpx"
+    )
+
+    print("Content-type: text/xml\n")
+    with open(gpx_file) as gpx:
+        for line in gpx:
+            print (line)
+
+
 
 
 def get_average_lon_lat_from_gpx(ride_id, route_number):
