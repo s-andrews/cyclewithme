@@ -1,9 +1,29 @@
 $( document ).ready(function() {
     get_ride()
 
+    // Check the guid
+    guid = Cookies.get("cwmguid")
+    if (! guid) {
+        guid = generate_guid()
+        Cookies.set("cwmguid",guid)
+    }
+
     // Add a handler for the signup submission
     $("#modalsignupbutton").click(complete_signup)
 });
+
+
+function generate_guid() {
+    // We make this long enough that it's statistically
+    // unlikely that they're going to clash by random
+    let result           = [];
+    let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < 30; i++ ) {
+      result.push(characters.charAt(Math.floor(Math.random() * charactersLength)));
+   }
+   return result.join('');
+}
 
 
 function complete_signup() {
@@ -15,6 +35,9 @@ function complete_signup() {
     // Get their name from the input form
     let name = $("#signupnamefield").val()
 
+    // Get their guid to submit alongside the name
+    let guid = Cookies.get("cwmguid")
+
     // Update the cookie with the name they've provided
     Cookies.set("cwmname",name,{ 'samesite': 'strict' })
 
@@ -22,7 +45,26 @@ function complete_signup() {
 
     // Submit this to the back end.
 
-    //TODO
+    $.ajax(
+        {
+            url: "/cgi-bin/cwm_backend.py",
+            data: {
+                action: "signup",
+                ride: ride_id,
+                route: route_number,
+                name: name,
+                guid: guid
+            },
+            success: function() {
+                get_ride()
+            }
+        }
+    )
+
+
+    // Close the modal
+    $("#signupmodal").modal("hide")
+
 }
 
 
@@ -42,15 +84,20 @@ function update_ride(json) {
     // Either request the json for this ride, or parse it to update the view
     if (json == null) {
         // Send an ajax request for the json file
+
         $.ajax(
             {
-                url: "/rides/"+ride_id+"/ride.json",
+                url: "/cgi-bin/cwm_backend.py",
+                data: {
+                    action: "json",
+                    ride: ride_id
+                },
                 success: function(x) {
                     update_ride(x)
                 }
             }
         )
-
+    
         return
     }
     
@@ -74,6 +121,11 @@ function update_ride(json) {
     for (i in json.routes) {
         let route = json.routes[i];
         console.log(route)
+        let joined_names = []
+        for (j in route.joined) {
+            joined_names.push(route.joined[j].name)
+        }
+
         $("#routes").append(`
         <div class="row">
         <div class="col-lg-12">
@@ -90,7 +142,7 @@ function update_ride(json) {
                                 <li><strong>Pace:</strong> ${route.pace}</li>
                                 <li><strong>Stop: </strong> ${route.stop}</li>
                                 <li><strong>Leader:</strong> ${route.leader}</li>
-                                <li><strong>Spaces:</strong> ${route.spaces} total, ${route.joined.length} taken <button type="button" class="btn btn-sm btn-secondary" data-html="true" data-container="body" data-toggle="popover" data-placement="right" data-content="${route.joined.join("<br>")}">Who?</button></li>
+                                <li><strong>Spaces:</strong> ${route.spaces} total, ${route.joined.length} taken <button type="button" class="btn btn-sm btn-secondary" data-html="true" data-container="body" data-toggle="popover" data-placement="right" data-content="${joined_names.join("<br>")}">Who?</button></li>
                             </ul>
                             <div class="text-center">
                                 <a href="#" data-routenumber="${route.number}" class="btn btn-primary signup">Sign up</a>

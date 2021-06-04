@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os.path
+import json
 from xml.dom.minidom import parse
 import xml.dom.minidom
 import cgi
@@ -12,8 +13,71 @@ def main():
     if form["action"].value == "gpx":
         get_gpx(form["ride_id"].value,form["route"].value)
 
+    elif form["action"].value == "json":
+        get_json(form["ride"].value)
+
+    elif form["action"].value == "signup":
+        signup(form["ride"].value,form["route"].value, form["name"].value, form["guid"].value)
+
     else:
         print("Didn't understand action "+form["action"].value)
+
+
+def get_json(ride_id):
+    json_file = json_file_location(ride_id)
+
+    print("Content-type: application/json\n")
+
+    with open(json_file) as f:
+        print(f.read())
+
+def json_file_location (ride_id):
+    json_file = os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "rides",
+        ride_id,
+        "ride.json"
+    )
+
+    return json_file
+
+def signup(ride, route_number, name, guid):
+    json_file = json_file_location(ride)
+
+    with open(json_file) as jf:
+        json_data = json.load(jf)
+
+    for route in json_data["routes"]:
+        found_route = False
+        if route["number"] == route_number:
+            found_route = True
+            already_signed = False
+            for joined in route["joined"]:
+                if joined["guid"] == guid:
+                    # They're already signed up
+                    already_signed = True
+                    break
+
+            if not already_signed:
+                route["joined"].append({"guid":guid, "name":name})
+            else:
+                raise Exception("Already signed")
+            
+            break
+
+        if not found_route:
+            raise Exception(f"Couldn't find route '{type(route_number)}'")
+
+            break
+
+    with open(json_file,"w") as jf:
+        json.dump(json_data,jf)
+
+    print("Content-type: text/plain\n\nTrue")
+
+
+
 
 def get_gpx(ride_id, route_number):
     gpx_file = os.path.join(
