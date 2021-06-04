@@ -53,6 +53,24 @@
     <div id="footer">CycleWith.me &copy;2021 Simon Andrews.  Please <a href="https://github.com/s-andrews/cyclewithme/issues">report any problems</a></div>
 
 
+    <!-- Signup Name Modal -->
+    <div class="modal fade" id="signupmodal" tabindex="-1" role="dialog" aria-labelledby="signupmodaltitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="signupmodaltitle">Enter Your Name to Sign Up</h5>
+          </div>
+          <div class="modal-body">
+            <input id="signupnamefield" type="text" placeholder="Your Name" class="form-control">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="button" id="modalsignupbutton" data-routenumber="" class="btn btn-success">Sign Up</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -63,6 +81,9 @@
     <!-- Openstreemap JS for tracks -->
     <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
     <script src="https://www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>
+
+    <!-- JSCookie library -->
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
 
     <!-- Our custom js -->
     <script src="js/cyclewithme.js"></script>

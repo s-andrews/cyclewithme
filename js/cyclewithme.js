@@ -1,6 +1,29 @@
 $( document ).ready(function() {
     get_ride()
+
+    // Add a handler for the signup submission
+    $("#modalsignupbutton").click(complete_signup)
 });
+
+
+function complete_signup() {
+    // Get the route number from the data attribute 
+    // on the submit button
+
+    let route_number = $("#modalsignupbutton").data("routenumber")
+
+    // Get their name from the input form
+    let name = $("#signupnamefield").val()
+
+    // Update the cookie with the name they've provided
+    Cookies.set("cwmname",name,{ 'samesite': 'strict' })
+
+    console.log("Set name to "+name)
+
+    // Submit this to the back end.
+
+    //TODO
+}
 
 
 function get_ride() {
@@ -70,7 +93,7 @@ function update_ride(json) {
                                 <li><strong>Spaces:</strong> ${route.spaces} total, ${route.joined.length} taken <button type="button" class="btn btn-sm btn-secondary" data-html="true" data-container="body" data-toggle="popover" data-placement="right" data-content="${route.joined.join("<br>")}">Who?</button></li>
                             </ul>
                             <div class="text-center">
-                                <a href="#" class="btn btn-primary signup">Sign up</a>
+                                <a href="#" data-routenumber="${route.number}" class="btn btn-primary signup">Sign up</a>
                             </div>
 
                         </div>
@@ -88,6 +111,15 @@ function update_ride(json) {
 
     // Enable the popovers for the list of riders
     $('[data-toggle="popover"]').popover()
+
+    // Enable the signup buttons
+    $(".signup").click(function(e) {
+        e.preventDefault();
+        $("#modalsignupbutton").data("routenumber",$(this).data("routenumber"))
+        let name = Cookies.get("cwmname")
+        $("#signupnamefield").val(name)
+        $("#signupmodal").modal("show")
+    })
 
 }
 
