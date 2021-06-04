@@ -118,12 +118,28 @@ function update_ride(json) {
     // Clear any existing route data
     $("#routes").html("")
 
+    // Check our guid against signups
+    let guid = Cookies.get("cwmguid")
+
     for (i in json.routes) {
         let route = json.routes[i];
-        console.log(route)
+
+        let signed_up = false
+
         let joined_names = []
         for (j in route.joined) {
             joined_names.push(route.joined[j].name)
+            if (route.joined[j].guid == guid) {
+                signed_up = true
+            }
+        }
+
+        let button_text = "Sign Up"
+        let button_class = "btn-primary signup"
+
+        if (signed_up) {
+            button_text = "Signed Up - Press to Widthdraw"
+            button_class = "btn-success withdraw"
         }
 
         $("#routes").append(`
@@ -145,7 +161,7 @@ function update_ride(json) {
                                 <li><strong>Spaces:</strong> ${route.spaces} total, ${route.joined.length} taken <button type="button" class="btn btn-sm btn-secondary" data-html="true" data-container="body" data-toggle="popover" data-placement="right" data-content="${joined_names.join("<br>")}">Who?</button></li>
                             </ul>
                             <div class="text-center">
-                                <a href="#" data-routenumber="${route.number}" class="btn btn-primary signup">Sign up</a>
+                                <a href="#" data-routenumber="${route.number}" class="btn ${button_class}">${button_text}</a>
                             </div>
 
                         </div>

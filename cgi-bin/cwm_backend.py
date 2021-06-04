@@ -48,8 +48,8 @@ def signup(ride, route_number, name, guid):
     with open(json_file) as jf:
         json_data = json.load(jf)
 
+    found_route = False
     for route in json_data["routes"]:
-        found_route = False
         if route["number"] == route_number:
             found_route = True
             already_signed = False
@@ -66,10 +66,9 @@ def signup(ride, route_number, name, guid):
             
             break
 
-        if not found_route:
-            raise Exception(f"Couldn't find route '{type(route_number)}'")
+    if not found_route:
+        raise Exception(f"Couldn't find route '{route_number}'")
 
-            break
 
     with open(json_file,"w") as jf:
         json.dump(json_data,jf)
