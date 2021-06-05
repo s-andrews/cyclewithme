@@ -71,12 +71,35 @@ function complete_signup() {
 
 function get_ride() {
     // Check the URL for ride=XXXXXX to get the ride event ID
+
+    // The URL will be of the form XXXX?ride=XXXXX&ADMIN=XXXXX
+    // where the admin is optional
     
-    let sections = window.location.href.split("ride=");
-    if (sections.length == 2) {
-        ride_id = sections[1];
-        update_ride(null);
+    let href = window.location.href
+
+    // Remove everything before the ?
+    let args = href.split("\?")[1]
+
+    // Get the key/value pairs
+    let keyval = args.split("&")
+
+    ride_id=""
+    admin_id=""
+
+    for (i in keyval) {
+        let splitval = keyval[i].split("=")
+        if (splitval[0]=="ride") {
+            ride_id = splitval[1]
+        }
+        else if (splitval[0]=="admin") {
+            admin_id = splitval[1]
+        }
     }
+
+    //TODO: validate ride and admin?
+
+    // TODO: bail out if no ride id?
+    update_ride(null);
 }
 
 
