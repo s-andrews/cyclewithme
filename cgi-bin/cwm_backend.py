@@ -19,6 +19,9 @@ def main():
     elif form["action"].value == "signup":
         signup(form["ride"].value,form["route"].value, form["name"].value, form["guid"].value)
 
+    elif form["action"].value == "withdraw":
+        withdraw(form["ride"].value,form["route"].value, form["guid"].value)
+
     else:
         print("Didn't understand action "+form["action"].value)
 
@@ -75,6 +78,32 @@ def signup(ride, route_number, name, guid):
 
     print("Content-type: text/plain\n\nTrue")
 
+def withdraw(ride, route_number, guid):
+    json_file = json_file_location(ride)
+
+    with open(json_file) as jf:
+        json_data = json.load(jf)
+
+    found_route = False
+    for route in json_data["routes"]:
+        if route["number"] == route_number:
+            new_joined = []
+            found_route = True
+            for joined in route["joined"]:
+                if joined["guid"] != guid:
+                    new_joined.append(joined)
+
+            route["joined"] = new_joined            
+            break
+
+    if not found_route:
+        raise Exception(f"Couldn't find route '{route_number}'")
+
+
+    with open(json_file,"w") as jf:
+        json.dump(json_data,jf)
+
+    print("Content-type: text/plain\n\nTrue")
 
 
 

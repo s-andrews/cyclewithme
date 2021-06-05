@@ -190,6 +190,33 @@ function update_ride(json) {
         $("#signupmodal").modal("show")
     })
 
+
+
+    // Enable the withdraw buttons
+    $(".withdraw").click(function(e) {
+
+        console.log("withdrawing")
+        e.preventDefault();
+
+        route_number = $(this).data("routenumber")
+
+        $.ajax(
+            {
+                url: "/cgi-bin/cwm_backend.py",
+                data: {
+                    action: "withdraw",
+                    ride: ride_id,
+                    route: route_number,
+                    guid: guid
+                },
+                success: function() {
+                    get_ride()
+                }
+            }
+        )
+    
+    })
+    
 }
 
 
