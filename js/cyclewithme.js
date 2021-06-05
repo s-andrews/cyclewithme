@@ -186,6 +186,7 @@ function update_ride(json) {
                             </ul>
                             <div class="text-center">
                                 <a href="#" data-routenumber="${route.number}" class="btn ${button_class}">${button_text}</a>
+                                <a href="#" data-routenumber="${route.number}" class="btn btn-danger adminonly">Delete Route</a>
                             </div>
 
                         </div>
