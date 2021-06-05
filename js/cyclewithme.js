@@ -5,8 +5,9 @@ $( document ).ready(function() {
     guid = Cookies.get("cwmguid")
     if (! guid) {
         guid = generate_guid()
-        Cookies.set("cwmguid",guid)
     }
+    // Update or set the guid cookie
+    Cookies.set("cwmguid",guid,{ 'samesite': 'strict', 'expires': 365 })
 
     // Add a handler for the signup submission
     $("#modalsignupbutton").click(complete_signup)
@@ -39,7 +40,7 @@ function complete_signup() {
     let guid = Cookies.get("cwmguid")
 
     // Update the cookie with the name they've provided
-    Cookies.set("cwmname",name,{ 'samesite': 'strict' })
+    Cookies.set("cwmname",name,{ 'samesite': 'strict', 'expires': 365 })
 
     console.log("Set name to "+name)
 
