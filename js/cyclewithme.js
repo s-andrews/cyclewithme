@@ -1,4 +1,7 @@
 $( document ).ready(function() {
+
+    is_admin = false
+
     get_ride()
 
     // Check the guid
@@ -97,9 +100,31 @@ function get_ride() {
     }
 
     //TODO: validate ride and admin?
+    validate_admin(ride_id,admin_id)
 
     // TODO: bail out if no ride id?
     update_ride(null);
+}
+
+
+function validate_admin(ride,admin) {
+    $.ajax(
+        {
+            url: "/cgi-bin/cwm_backend.py",
+            data: {
+                action: "validate_admin",
+                ride: ride,
+                admin: admin
+            },
+            success: function(x) {
+                console.log("Response='"+x+"'")
+                if (x.trim() == "True"){
+                    is_admin = true
+                 $(".adminonly").show()
+                }
+            }
+        }
+    )
 }
 
 
@@ -214,8 +239,6 @@ function update_ride(json) {
         $("#signupmodal").modal("show")
     })
 
-
-
     // Enable the withdraw buttons
     $(".withdraw").click(function(e) {
 
@@ -240,6 +263,11 @@ function update_ride(json) {
         )
     
     })
+
+    // Make admin options visible if we are one
+    if (is_admin) {
+        $(".adminonly").show()
+    }
     
 }
 

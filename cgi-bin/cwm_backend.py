@@ -22,6 +22,10 @@ def main():
     elif form["action"].value == "withdraw":
         withdraw(form["ride"].value,form["route"].value, form["guid"].value)
 
+    elif form["action"].value == "validate_admin":
+        validate_admin(form["ride"].value,form["admin"].value)
+
+
     else:
         print("Didn't understand action "+form["action"].value)
 
@@ -104,6 +108,31 @@ def withdraw(ride, route_number, guid):
         json.dump(json_data,jf)
 
     print("Content-type: text/plain\n\nTrue")
+
+
+def get_admin_id(ride_id):
+    admin_file = os.path.join(
+    os.path.dirname(__file__),
+    "..",
+    "rides",
+    ride_id,
+    "admin_id.txt"
+    )
+
+    with open(admin_file) as af:
+        admin_id = af.read().strip()
+        return admin_id
+
+
+
+def validate_admin(ride, admin):
+    admin_id = get_admin_id(ride)
+
+    if admin_id == admin:
+        print("Content-type: text/plain\n\nTrue")
+
+    else:
+        raise Exception(f"Admin IDs didn't match")
 
 
 
