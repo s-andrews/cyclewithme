@@ -58,4 +58,8 @@ retrieved = rides.find_one({"ride_id":"EXAMPLEIDWILLBERANDOM"})
 for route in retrieved["routes"]:
     for key in route.keys():
         print(key)
+        if key=="number":
+            print(route["number"])
+        if key == "gpx":
+            print(route["gpx"][0:20])
 

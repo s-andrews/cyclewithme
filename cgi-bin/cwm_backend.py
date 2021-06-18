@@ -82,7 +82,7 @@ def add_new_route(form):
     highest_route += 1
 
     gpx_file = form["gpx"]
-    gpx = gpx_file.file.read()
+    gpx = gpx_file.file.read().decode("UTF-8")
 
     lat,lon = get_average_lon_lat_from_gpx(gpx)
 
