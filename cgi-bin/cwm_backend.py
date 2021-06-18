@@ -124,18 +124,10 @@ def get_gpx(ride_id, route_number):
 
 
 
-def get_average_lon_lat_from_gpx(ride_id, route_number):
-    gpx_file = os.path.join(
-        os.path.dirname(__file__),
-        "..",
-        "rides",
-        ride_id,
-        f"route{route_number}.gpx"
-    )
-
+def get_average_lon_lat_from_gpx(gpx_data):
 
     # Open XML document using minidom parser
-    DOMTree = xml.dom.minidom.parse(gpx_file)
+    DOMTree = xml.dom.minidom.parseString(gpx_data)
     collection = DOMTree.documentElement
 
     points = collection.getElementsByTagName("trkpt")
@@ -151,13 +143,7 @@ def get_average_lon_lat_from_gpx(ride_id, route_number):
     lon /= len(points)
 
     print(f"Average position is lat={lat} lon={lon}")
-
-
     print(f"Found {len(points)} points")
-
-
-
-
 
 
 
