@@ -1,4 +1,15 @@
-{   
+#!python
+from pymongo import MongoClient
+
+client = MongoClient()
+
+db = client.cwm_database
+
+rides = db.rides_collection
+
+ride = {
+    "ride_id": "EXAMPLEIDWILLBERANDOM",
+    "admin_id": "IMANADMIN",   
     "name": "BCC Sunday Club Ride",
     "date": "2021-05-23",
     "routes" : [
@@ -34,3 +45,17 @@
         }
     ]
 }
+
+for route in ride["routes"]:
+    with open("c:/Users/andrewss/git/cyclewithme/rides/"+ride["ride_id"]+"/route"+route["number"]+".gpx") as gpxf:
+        route["gpx"] = gpxf.read()
+
+rides.remove({})
+rides.insert_one(ride)
+
+retrieved = rides.find_one({"ride_id":"EXAMPLEIDWILLBERANDOM"})
+
+for route in retrieved["routes"]:
+    for key in route.keys():
+        print(key)
+
