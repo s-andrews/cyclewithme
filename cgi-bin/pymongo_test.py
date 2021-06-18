@@ -50,8 +50,8 @@ for route in ride["routes"]:
     with open("c:/Users/andrewss/git/cyclewithme/rides/"+ride["ride_id"]+"/route"+route["number"]+".gpx") as gpxf:
         route["gpx"] = gpxf.read()
 
-rides.remove({})
-rides.insert_one(ride)
+# rides.remove({})
+# rides.insert_one(ride)
 
 retrieved = rides.find_one({"ride_id":"EXAMPLEIDWILLBERANDOM"})
 
