@@ -89,10 +89,22 @@ function complete_signup() {
                     // Change the button text and class
                     button.text("Withdraw")
                     button.removeClass("btn-primary")
+                    button.removeClass("signup")
                     button.addClass("btn-warning")
+                    button.addClass("withdraw")
 
                     // Make the alert banner visible
                     button.parent().parent().find(".alert").removeClass("hidden")
+
+                    // Increase the value in the taken field
+                    let takennumber = button.parent().parent().find(".takennumber")
+                    takennumber.text(parseInt(takennumber.text())+1)
+
+                    // Add your name to the list of attendees
+                    // TODO: Work out how to do this...
+
+                    // Rebind the click event
+                    rebind_signup_buttons()
                 }
 
             }
@@ -297,7 +309,7 @@ function update_ride(json) {
                                 <li><strong>Pace:</strong> ${route.pace}</li>
                                 <li><strong>Stop: </strong> ${route.stop}</li>
                                 <li><strong>Leader:</strong> ${route.leader}</li>
-                                <li><strong>Spaces:</strong> ${route.spaces} total, ${route.joined.length} taken <button type="button" class="btn btn-sm btn-secondary" data-html="true" data-container="body" data-toggle="popover" data-placement="right" data-content="${joined_names.join("<br>")}">Who?</button></li>
+                                <li><strong>Spaces:</strong> ${route.spaces} total, <span class="takennumber">${route.joined.length}</span> taken <button type="button" class="btn btn-sm btn-secondary" data-html="true" data-container="body" data-toggle="popover" data-placement="right" data-content="${joined_names.join("<br>")}">Who?</button></li>
                             </ul>
                             <div class="text-center">
                                 <a href="#" data-routenumber="${route.number}" class="btn ${button_class}">${button_text}</a>
@@ -327,39 +339,8 @@ function update_ride(json) {
         $('[data-toggle="popover"]').popover()
     }   
 
-    // Enable the signup buttons
-    $(".signup").click(function(e) {
-        e.preventDefault();
-        $("#modalsignupbutton").data("routenumber",$(this).data("routenumber"))
-        let name = Cookies.get("cwmname")
-        $("#signupnamefield").val(name)
-        $("#signupmodal").modal("show")
-    })
-
-    // Enable the withdraw buttons
-    $(".withdraw").click(function(e) {
-
-        console.log("withdrawing")
-        e.preventDefault();
-
-        route_number = $(this).data("routenumber")
-
-        $.ajax(
-            {
-                url: "/cgi-bin/cwm_backend.py",
-                data: {
-                    action: "withdraw",
-                    ride: ride_id,
-                    route: route_number,
-                    guid: guid
-                },
-                success: function() {
-                    get_ride()
-                }
-            }
-        )
-    
-    })
+    // Make the signup/widtdraw buttons work
+    rebind_signup_buttons()
 
     // Enable the delete route buttons
     $(".deleteroute").click(function(e) {
@@ -390,6 +371,76 @@ function update_ride(json) {
     }
     
 }
+
+function rebind_signup_buttons() {
+    // Enable the signup buttons
+    $(".signup").unbind()
+    $(".signup").click(function(e) {
+        e.preventDefault();
+        $("#modalsignupbutton").data("routenumber",$(this).data("routenumber"))
+        let name = Cookies.get("cwmname")
+        $("#signupnamefield").val(name)
+        $("#signupmodal").modal("show")
+    })
+
+    // Enable the withdraw buttons
+    $(".withdraw").unbind()
+    $(".withdraw").click(function(e) {
+
+        e.preventDefault();
+        route_number = $(this).data("routenumber")
+
+        $.ajax(
+            {
+                url: "/cgi-bin/cwm_backend.py",
+                data: {
+                    action: "withdraw",
+                    ride: ride_id,
+                    route: route_number,
+                    guid: guid
+                },
+                success: function(route_number) {
+                    // We need to modify the code for
+                    // the ride to show that we're 
+                    // signed up
+                    console.log("Withdrawn from "+route_number)
+
+                    // List the withdraw buttons
+                    let withdraw_buttons = $(".withdraw")
+
+                    // Go through them to find the one which 
+                    // matches the route number
+                    for (let i=0;i<withdraw_buttons.length;i++) {
+                        let button = withdraw_buttons.eq(i)
+                        if (button.data("routenumber") != route_number) {
+                            continue
+                        }
+
+                        // Change the button text and class
+                        button.text("Sign Up")
+                        button.removeClass("btn-warning")
+                        button.removeClass("withdraw")
+                        button.addClass("btn-primary")
+                        button.addClass("signup")
+
+                        // Make the alert banner invisible
+                        button.parent().parent().find(".alert").addClass("hidden")
+
+                        // Decrease the value in the taken field
+                        let takennumber = button.parent().parent().find(".takennumber")
+                        takennumber.text(parseInt(takennumber.text())-1)
+
+                        // Add your name to the list of attendees
+                        // TODO: Work out how to do this...
+
+                        // Rebind the click event
+                        rebind_signup_buttons()
+
+                    } // End for
+                } // End success
+            }) // End ajax
+    }) // End click
+} // End function
 
 
 function load_map(route_number, lat, lon) {
