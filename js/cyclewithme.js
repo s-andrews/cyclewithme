@@ -99,8 +99,9 @@ function get_ride() {
         }
     }
 
-    //TODO: validate ride and admin?
-    validate_admin(ride_id,admin_id)
+    if (admin_id) {
+        validate_admin(ride_id,admin_id)
+    }
 
     // TODO: bail out if no ride id?
     update_ride(null);
