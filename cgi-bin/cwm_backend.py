@@ -34,9 +34,35 @@ def main():
     elif form["action"].value == "new_route":
         add_new_route(form)
 
+    elif form["action"].value == "delete_route":
+        delete_route(form["ride"].value,form["admin"].value, form["route"].value)
+
+
 
     else:
         print("Didn't understand action "+form["action"].value)
+
+
+def delete_route(ride_id,admin_id,route_number):
+    ride = rides.find_one({"ride_id":ride_id})
+
+    if ride["admin_id"] != admin_id:
+        raise Exception("Invalid admin id for ride")
+
+    seen_routes = []
+    for i,route in enumerate(ride["routes"]):
+        seen_routes.append(str(route["number"]))
+        if str(route["number"]) == route_number:
+            ride["routes"].pop(i)
+            rides.update({"ride_id":ride_id},ride)
+
+            print("Content-type: text/plain\n\nTrue")
+            return
+
+    raise Exception(f"Couldn't find route to remove matching {route_number} checked {seen_routes}")
+   
+
+
 
 def add_new_route(form):
 
@@ -55,10 +81,13 @@ def add_new_route(form):
     
     highest_route += 1
 
-    # TODO: Load gpx and calculate lat/lon
+    gpx_file = form["gpx"]
+    gpx = gpx_file.file.read()
+
+    lat,lon = get_average_lon_lat_from_gpx(gpx)
 
     new_route = {
-            "number": highest_route,
+            "number": str(highest_route),
             "name": form["title"].value,
             "description" : form["description"].value,
             "start_time": form["start"].value,
@@ -68,9 +97,9 @@ def add_new_route(form):
             "stop": form["stop"].value,
             "leader": form["leader"].value,
             "spaces": form["spaces"].value,
-            "gpx": "",
-            "lat": "52.15231006196024",
-            "lon": "0.2618071877055751",
+            "gpx": gpx,
+            "lat": str(lat),
+            "lon": str(lon),
             "joined" : []
         }
 
@@ -189,8 +218,7 @@ def get_average_lon_lat_from_gpx(gpx_data):
     lat /= len(points)
     lon /= len(points)
 
-    print(f"Average position is lat={lat} lon={lon}")
-    print(f"Found {len(points)} points")
+    return(lat,lon)
 
 
 
