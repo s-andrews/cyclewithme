@@ -31,9 +31,56 @@ def main():
     elif form["action"].value == "validate_admin":
         validate_admin(form["ride"].value,form["admin"].value)
 
+    elif form["action"].value == "new_route":
+        add_new_route(form)
+
 
     else:
         print("Didn't understand action "+form["action"].value)
+
+def add_new_route(form):
+
+    ride = rides.find_one({"ride_id":form["ride_id"].value})
+
+    if ride["admin_id"] != form["admin_id"].value:
+        raise Exception("Invalid admin id for ride")
+
+    highest_route = 0
+
+    for route in ride["routes"]:
+        number = int(route["number"])
+        if number > highest_route:
+            highest_route = number
+
+    
+    highest_route += 1
+
+    # TODO: Load gpx and calculate lat/lon
+
+    new_route = {
+            "number": highest_route,
+            "name": form["title"].value,
+            "description" : form["description"].value,
+            "start_time": form["start"].value,
+            "departs": form["departs"].value,
+            "distance" : form["distance"].value,
+            "pace": form["pace"].value,
+            "stop": form["stop"].value,
+            "leader": form["leader"].value,
+            "spaces": form["spaces"].value,
+            "gpx": "",
+            "lat": "52.15231006196024",
+            "lon": "0.2618071877055751",
+            "joined" : []
+        }
+
+    ride["routes"].append(new_route)
+
+    rides.update({"ride_id":form["ride_id"].value},ride)
+
+    print("Content-type: text/plain\n\nTrue")
+
+
 
 
 def get_json(ride_id):

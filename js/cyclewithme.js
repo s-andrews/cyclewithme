@@ -13,7 +13,17 @@ $( document ).ready(function() {
     Cookies.set("cwmguid",guid,{ 'samesite': 'strict', 'expires': 365 })
 
     // Add a handler for the signup submission
-    $("#modalsignupbutton").click(complete_signup)
+    $("#modalsignupbutton").click(function(e){
+        e.preventDefault();
+        complete_signup()
+    })
+
+    // Add a handler for the new route submission button
+    $("#newroutesubmit").click(function(e){
+        console.log("Clicked Submit")
+        e.preventDefault()
+        add_new_route()
+    })
 });
 
 
@@ -71,6 +81,54 @@ function complete_signup() {
 
 }
 
+function add_new_route() {
+
+    let title = $("#newtitle").val()
+    let description = $("#newdescription").val()
+    let start = $("#newstart").val()
+    let departs = $("#newdeparts").val()
+    let distance = $("#newdistance").val()
+    let pace = $("#newpace").val()
+    let stop = $("#newstop").val()
+    let leader = $("#newleader").val()
+    let spaces = $("#newspaces").val()
+    let gpx = $("#newgpx")[0].files[0]
+
+    // Submit this to the back end.
+
+    let data = new FormData();
+
+    data.append("action","new_route");
+    data.append("ride_id",ride_id),
+    data.append("admin_id",admin_id),
+    data.append("title",title);
+    data.append("description",description);
+    data.append("start",start);
+    data.append("departs",departs);
+    data.append("distance",distance);
+    data.append("pace",pace);
+    data.append("stop",stop);
+    data.append("leader",leader);
+    data.append("spaces",spaces);
+    data.append("gpx",gpx);
+
+    $.ajax(
+        {
+        type: "POST",
+        url: "/cgi-bin/cwm_backend.py",
+        data: data,
+        processData: false,
+        contentType: false,
+        success: function() {
+            get_ride()
+        },
+        error: function(query,status,error){
+            console.log("Add new route failed: "+status+" Error:"+error);
+        }
+    });
+
+}
+
 
 function get_ride() {
     // Check the URL for ride=XXXXXX to get the ride event ID
@@ -103,8 +161,12 @@ function get_ride() {
         validate_admin(ride_id,admin_id)
     }
 
-    // TODO: bail out if no ride id?
-    update_ride(null);
+    if (ride_id) {
+        update_ride(null);
+    }
+    else {
+        // TODO: Set up the page for creating a new ride
+    }
 }
 
 
