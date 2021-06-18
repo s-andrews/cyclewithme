@@ -51,3 +51,8 @@ a.signup {
 .adminonly {
     display: none
 }
+
+/* A general hidden class to hide stuff */
+.hidden {
+    display: none
+}

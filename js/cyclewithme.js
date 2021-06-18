@@ -44,6 +44,8 @@ function complete_signup() {
     // Get the route number from the data attribute 
     // on the submit button
 
+    // TODO: Check there's space
+
     let route_number = $("#modalsignupbutton").data("routenumber")
 
     // Get their name from the input form
@@ -54,8 +56,6 @@ function complete_signup() {
 
     // Update the cookie with the name they've provided
     Cookies.set("cwmname",name,{ 'samesite': 'strict', 'expires': 365 })
-
-    console.log("Set name to "+name)
 
     // Submit this to the back end.
 
@@ -69,8 +69,32 @@ function complete_signup() {
                 name: name,
                 guid: guid
             },
-            success: function() {
-                get_ride()
+            success: function(route_number) {
+                // We need to modify the code for
+                // the ride to show that we're 
+                // signed up
+                console.log("Signed up for "+route_number)
+
+                // List the signup buttons
+                let signup_buttons = $(".signup")
+
+                // Go through them to find the one which 
+                // matches the route number
+                for (let i=0;i<signup_buttons.length;i++) {
+                    let button = signup_buttons.eq(i)
+                    if (button.data("routenumber") != route_number) {
+                        continue
+                    }
+
+                    // Change the button text and class
+                    button.text("Withdraw")
+                    button.removeClass("btn-primary")
+                    button.addClass("btn-warning")
+
+                    // Make the alert banner visible
+                    button.parent().parent().find(".alert").removeClass("hidden")
+                }
+
             }
         }
     )
@@ -248,10 +272,12 @@ function update_ride(json) {
 
         let button_text = "Sign Up"
         let button_class = "btn-primary signup"
+        let alert_class = " hidden"
 
         if (signed_up) {
-            button_text = "Signed Up - Press to Widthdraw"
-            button_class = "btn-success withdraw"
+            button_text = "Widthdraw"
+            button_class = "btn-warning withdraw"
+            alert_class = ""
         }
 
         $("#routes").append(`
@@ -262,6 +288,7 @@ function update_ride(json) {
                     <div class="row">
                         <div class="col-md-5">
                             <h3 class="card-title">${route.name}</h3>
+                            <div class="alert alert-success ${alert_class}" role="alert">You're going!</div>
                             <p class="card-text">${route.description}</p>
                             <ul>
                                 <li><strong>Start Time:</strong> ${route.start_time}</li>
@@ -290,8 +317,15 @@ function update_ride(json) {
         load_map(route.number, route.lat, route.lon)
     }
 
-    // Enable the popovers for the list of riders
-    $('[data-toggle="popover"]').popover()
+    // Enable the popovers for the list of riders unless
+    // we're running as an admin in which case we provide
+    // additional information
+    if (is_admin) {
+
+    }
+    else {
+        $('[data-toggle="popover"]').popover()
+    }   
 
     // Enable the signup buttons
     $(".signup").click(function(e) {

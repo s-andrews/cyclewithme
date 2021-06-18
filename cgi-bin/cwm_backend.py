@@ -152,7 +152,7 @@ def signup(ride, route_number, name, guid):
 
     rides.update({"ride_id":ride},json_data)
 
-    print("Content-type: text/plain\n\nTrue")
+    print(f"Content-type: text/plain\n\n{route_number}", end="")
 
 def withdraw(ride, route_number, guid):
     json_data = rides.find_one({"ride_id":ride})
@@ -174,7 +174,7 @@ def withdraw(ride, route_number, guid):
 
     rides.update({"ride_id":ride},json_data)
 
-    print("Content-type: text/plain\n\nTrue")
+    print(f"Content-type: text/plain\n\n{route_number}", end="")
 
 
 def validate_admin(ride, admin):
