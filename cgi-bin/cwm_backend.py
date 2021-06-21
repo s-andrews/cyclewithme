@@ -57,7 +57,7 @@ def new_event(title,date):
 
      rides.insert_one(ride)
 
-     print(f"Content-type: text/plain\n\n{ride['ride_id']} {ride['admin_id']}", end="")
+     print("Content-type: text/plain\n\n"+ride['ride_id']+" "+ride['admin_id'], end="")
 
 
 def generate_id(size):
