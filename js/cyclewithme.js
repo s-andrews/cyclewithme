@@ -30,6 +30,12 @@ $( document ).ready(function() {
         $("#newroutemodal").modal("show")
     })
 
+    // Add the new event handler
+    $("#neweventsubmit").click(function(e) {
+        e.preventDefault()
+        create_new_event()
+    })
+
     // Make the file upload actually show the 
     // file name
     $('input[type="file"]').change(function(e){
@@ -37,6 +43,33 @@ $( document ).ready(function() {
         $('.custom-file-label').html(fileName);
     });
 });
+
+
+function create_new_event() {
+    // Make a new event and redirect to the event page
+
+    let eventtitle = $("#neweventtitle").val()
+    let eventdate = $("#neweventdate").val()
+
+    $.ajax(
+        {
+            url: "/cgi-bin/cwm_backend.py",
+            data: {
+                action: "newevent",
+                title: eventtitle,
+                date: eventdate
+            },
+            success: function(ids) {
+                let sections = ids.split(" ")
+                ride_id = sections[0]
+                admin_id = sections[1]
+                window.location.replace("/?ride="+ride_id+"&admin="+admin_id)
+            }
+        }
+    )
+
+
+}
 
 
 function generate_guid() {
