@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json
+import random
 from pymongo import MongoClient
 from xml.dom.minidom import parse
 import xml.dom.minidom
@@ -37,10 +38,37 @@ def main():
     elif form["action"].value == "delete_route":
         delete_route(form["ride"].value,form["admin"].value, form["route"].value)
 
-
+    elif form["action"].value == "newevent":
+        new_event(form["title"].value,form["date"].value)
 
     else:
         print("Didn't understand action "+form["action"].value)
+
+
+
+def new_event(title,date):
+     ride = {
+         "ride_id": generate_id(10),
+         "admin_id": generate_id(10),   
+         "name": title,
+         "date": date,
+         "routes" : []
+     }
+
+     rides.insert_one(ride)
+
+     print(f"Content-type:text/plain\n\n{ride['ride_id']} {ride['admin_id']}", end="")
+
+
+def generate_id(size):
+    letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+    code = ""
+
+    for _ in range(size):
+        code += random.choice(letters)
+
+    return code
 
 
 def delete_route(ride_id,admin_id,route_number):
