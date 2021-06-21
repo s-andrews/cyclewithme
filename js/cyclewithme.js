@@ -29,6 +29,13 @@ $( document ).ready(function() {
     $("#newroutebutton").click(function(){
         $("#newroutemodal").modal("show")
     })
+
+    // Make the file upload actually show the 
+    // file name
+    $('input[type="file"]').change(function(e){
+        var fileName = e.target.files[0].name;
+        $('.custom-file-label').html(fileName);
+    });
 });
 
 
@@ -183,18 +190,21 @@ function get_ride() {
     let args = href.split("\?")[1]
 
     // Get the key/value pairs
-    let keyval = args.split("&")
-
     ride_id=""
     admin_id=""
 
-    for (i in keyval) {
-        let splitval = keyval[i].split("=")
-        if (splitval[0]=="ride") {
-            ride_id = splitval[1]
-        }
-        else if (splitval[0]=="admin") {
-            admin_id = splitval[1]
+    if (args) {
+        let keyval = args.split("&")
+
+
+        for (i in keyval) {
+            let splitval = keyval[i].split("=")
+            if (splitval[0]=="ride") {
+                ride_id = splitval[1]
+            }
+            else if (splitval[0]=="admin") {
+                admin_id = splitval[1]
+            }
         }
     }
 
@@ -203,13 +213,21 @@ function get_ride() {
     }
 
     if (ride_id) {
+        $("#newrideinstructions").hide();
         update_ride(null);
     }
     else {
         // TODO: Set up the page for creating a new ride
+        $("#showevent").hide();
+        populate_new_ride()
     }
 }
 
+
+function populate_new_ride() {
+    // This adds some basic information to the page to allow
+    // people to set up a new ride
+}
 
 function validate_admin(ride,admin) {
     $.ajax(
@@ -312,8 +330,8 @@ function update_ride(json) {
                                 <li><strong>Departs:</strong> ${route.departs}</li>
                                 <li><strong>Distance:</strong> ${route.distance} miles</li>
                                 <li><strong>Pace:</strong> ${route.pace}</li>
-                                <li><strong>Stop: </strong> ${route.stop}</li>
-                                <li><strong>Leader:</strong> ${route.leader}</li>
+                                <li><strong>Stop(s): </strong> ${route.stop}</li>
+                                <li><strong>Leader(s):</strong> ${route.leader}</li>
                                 <li><strong>Spaces:</strong> ${route.spaces} total, <span class="takennumber">${route.joined.length}</span> taken <button type="button" class="btn btn-sm btn-secondary" data-html="true" data-container="body" data-toggle="popover" data-placement="right" data-content="${joined_names.join("<br>")}">Who?</button></li>
                             </ul>
                             <div class="text-center">

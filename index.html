@@ -1,210 +1,270 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Our CSS -->
-    <link rel="stylesheet" href="cyclewithme.css" crossorigin="anonymous">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-
-
-    <title>CycleWith.Me - Plan your group rides</title>
-  </head>
-  <body>
- 
-    <!-- Top navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">CycleWith.me</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="#">Start New ride</a>
-            </li>
-        </div>
-    </nav>
+  <!-- Our CSS -->
+  <link rel="stylesheet" href="cyclewithme.css" crossorigin="anonymous">
 
 
-    <!-- Introduction information if they're not looking at an actual ride -->
 
-    <div id="showevent">
-        <!-- Main header for the ride -->
-        <div class="jumbotron jumbotron-fluid">
-            <div class="container">
-                <h1 id="eventtitle" class="display-4"></h1>
-                <h2 id="eventdate" class="display-5"></h2>
-            </div>
-        </div>
+  <title>CycleWith.Me - Plan your group rides</title>
+</head>
 
-        <!-- Details of the routes -->
-        <div id="routes" class="container">
-        </div> <!-- End routes -->
+<body>
 
-        <!-- Option to add a new route -->
+  <!-- Top navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">CycleWith.me</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-        <button id="newroutebutton" type="button" class="btn btn-primary btn-lg adminonly">+ Add New Route</button>
-
-
-        <div id="newroutemodal" class="modal" tabindex="-1" role="dialog">
-          <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-            <div class="container text-center">
-              <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                              <div class="col-md-2"></div>
-                                <div class="col-md-8">
-                                  <h3 class="card-title">Add New Route</h3>
-                                  <form>
-                                    <div class="form-group row">
-                                      <label for="newtitle" class="col-sm-4 col-form-label">Route Title</label>
-                                      <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="newtitle">
-                                      </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                      <label for="newdescription" class="col-sm-4 col-form-label">Description</label>
-                                      <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="newdescription">
-                                      </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                      <label for="newstart" class="col-sm-4 col-form-label">Start Time</label>
-                                      <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="newstart">
-                                      </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                      <label for="newdeparts" class="col-sm-4 col-form-label">Departs From</label>
-                                      <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="newdeparts">
-                                      </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                      <label for="newdistance" class="col-sm-4 col-form-label">Distance (miles)</label>
-                                      <div class="col-sm-8">
-                                        <input type="number" class="form-control" id="newdistance" value=10> 
-                                      </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                      <label for="newpace" class="col-sm-4 col-form-label">Pace</label>
-                                      <div class="col-sm-8">
-                                        <select class="form-control" id="newpace">
-                                          <option>Leisurely (~11mph)</option>
-                                          <option>Relaxed (~13mph)</option>
-                                          <option>Steady (~15mph)</option>
-                                          <option>Pushing on (~17mph)</option>
-                                          <option>Pacey (~19mph)</option>
-                                          <option>Properly Quick (20+mph)</option>
-                                        </select>
-                                      </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                      <label for="newstop" class="col-sm-4 col-form-label">Stop Location</label>
-                                      <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="newstop">
-                                      </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                      <label for="newleader" class="col-sm-4 col-form-label">Ride Leader</label>
-                                      <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="newleader">
-                                      </div>
-                                    </div>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/">Create New Event</a>
+        </li>
+    </div>
+  </nav>
 
 
-                                    <div class="form-group row">
-                                      <label for="newspaces" class="col-sm-4 col-form-label">Spaces</label>
-                                      <div class="col-sm-8">
-                                        <input type="number" class="form-control" id="newspaces" value=6>
-                                      </div>
-                                    </div>
+  <!-- Introduction information if they're not looking at an actual ride -->
 
-                                    <div class="form-group row">
-                                      <label for="newgpx" class="col-sm-4 col-form-label">GPX File</label>
-                                      <div class="col-sm-8">
-                                        <input type="file" class="custom-file-input" id="newgpx">
-                                        <label class="custom-file-label" for="newgpx">Choose GPX file</label>
-                                      </div>
-                                    </div>
+  <div id="newrideinstructions">
+    <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <h1 class="display-4">Plan your next ride!</h1>
 
+        <p>
+          This site provides an easy way for you to set up a group cycling
+          event involving one or more routes and let people sign up for it.
+        </p>
+        <p>
+          All you need is a date, a short description, and a GPX file for
+          the routes you want to take.
+        </p>
+        <p>
+          To get started just fill in the form below.
+        </p>
+      </div>
+    </div>
 
-                                    <div class="form-group row">
-                                      <div class="col-sm-12">
-                                        <input type="submit" class="form-control btn-success" id="newroutesubmit" value="Add Route to Ride">
-                                      </div>
-                                    </div>
-
-                                  </form>
-        
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="container">
+      <form>
+        <div class="form-group row">
+          <label for="neweventtitle" class="col-sm-4 col-form-label">Event Title</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" id="neweventtitle">
           </div>
-        </div>    
+        </div>
 
-        </div> 
+        <div class="form-group row">
+          <label for="neweventdate" class="col-sm-4 col-form-label">Date</label>
+          <div class="col-sm-4">
+            <input type="date" class="form-control" id="neweventdate">
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4">
+            <input type="submit" class="form-control btn-success" id="neweventsubmit" value="Create New Event">
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
 
 
-    </div> <!-- End event -->
+  <div id="showevent">
+    <!-- Main header for the ride -->
+    <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <h1 id="eventtitle" class="display-4"></h1>
+        <h2 id="eventdate" class="display-5"></h2>
+      </div>
+    </div>
+
+    <!-- Details of the routes -->
+    <div id="routes" class="container">
+    </div> <!-- End routes -->
+
+    <!-- Option to add a new route -->
+
+    <div id="addnewroutediv" class="container adminonly text-center">
+      <button id="newroutebutton" type="button" class="btn btn-success btn-lg">+ Add New Route</button>
+    </div>
 
 
-    <div id="footer">CycleWith.me &copy;2021 Simon Andrews.  Please <a href="https://github.com/s-andrews/cyclewithme/issues">report any problems</a></div>
-
-
-    <!-- Signup Name Modal -->
-    <div class="modal fade" id="signupmodal" tabindex="-1" role="dialog" aria-labelledby="signupmodaltitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
+    <div id="newroutemodal" class="modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="signupmodaltitle">Enter Your Name to Sign Up</h5>
-          </div>
-          <div class="modal-body">
-            <input id="signupnamefield" type="text" placeholder="Your Name" class="form-control">
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            <button type="button" id="modalsignupbutton" data-routenumber="" class="btn btn-success">Sign Up</button>
+          <div class="container text-center">
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-2"></div>
+                      <div class="col-md-8">
+                        <h3 class="card-title">Add New Route</h3>
+                        <form>
+                          <div class="form-group row">
+                            <label for="newtitle" class="col-sm-4 col-form-label">Route Title</label>
+                            <div class="col-sm-8">
+                              <input type="text" class="form-control" id="newtitle">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="newdescription" class="col-sm-4 col-form-label">Description</label>
+                            <div class="col-sm-8">
+                              <input type="text" class="form-control" id="newdescription">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="newstart" class="col-sm-4 col-form-label">Start Time</label>
+                            <div class="col-sm-8">
+                              <input type="text" class="form-control" id="newstart">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="newdeparts" class="col-sm-4 col-form-label">Departs From</label>
+                            <div class="col-sm-8">
+                              <input type="text" class="form-control" id="newdeparts">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="newdistance" class="col-sm-4 col-form-label">Distance (miles)</label>
+                            <div class="col-sm-8">
+                              <input type="number" class="form-control" id="newdistance" value=10>
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="newpace" class="col-sm-4 col-form-label">Pace</label>
+                            <div class="col-sm-8">
+                              <select class="form-control" id="newpace">
+                                <option>Leisurely (~11mph)</option>
+                                <option>Relaxed (~13mph)</option>
+                                <option>Steady (~15mph)</option>
+                                <option>Pushing on (~17mph)</option>
+                                <option>Pacey (~19mph)</option>
+                                <option>Properly Quick (20+mph)</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="newstop" class="col-sm-4 col-form-label">Stop Location(s)</label>
+                            <div class="col-sm-8">
+                              <input type="text" class="form-control" id="newstop">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="newleader" class="col-sm-4 col-form-label">Ride Leader(s)</label>
+                            <div class="col-sm-8">
+                              <input type="text" class="form-control" id="newleader">
+                            </div>
+                          </div>
+
+
+                          <div class="form-group row">
+                            <label for="newspaces" class="col-sm-4 col-form-label">Spaces</label>
+                            <div class="col-sm-8">
+                              <input type="number" class="form-control" id="newspaces" value=6>
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="newgpx" class="col-sm-4 col-form-label">GPX File</label>
+                            <div class="col-sm-8 custom-file">
+                              <input type="file" class="custom-file-input" id="newgpx">
+                              <label class="custom-file-label" for="newgpx">Select GPX file</label>
+                            </div>
+                          </div>
+
+
+                          <div class="form-group row">
+                            <div class="col-sm-12">
+                              <input type="submit" class="form-control btn-success" id="newroutesubmit"
+                                value="Add Route to Ride">
+                            </div>
+                          </div>
+
+                        </form>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
+  </div> <!-- End event -->
 
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <div id="footer">CycleWith.me &copy;2021 Simon Andrews. Please <a
+      href="https://github.com/s-andrews/cyclewithme/issues">report any problems</a>
+  </div>
 
-    <!-- Openstreemap JS for tracks -->
-    <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
-    <script src="https://www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>
 
-    <!-- JSCookie library -->
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+  <!-- Signup Name Modal -->
+  <div class="modal fade" id="signupmodal" tabindex="-1" role="dialog" aria-labelledby="signupmodaltitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="signupmodaltitle">Enter Your Name to Sign Up</h5>
+        </div>
+        <div class="modal-body">
+          <input id="signupnamefield" type="text" placeholder="Your Name" class="form-control">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" id="modalsignupbutton" data-routenumber="" class="btn btn-success">Sign Up</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <!-- Our custom js -->
-    <script src="js/cyclewithme.js"></script>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+
+  <!-- Openstreemap JS for tracks -->
+  <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+  <script src="https://www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>
+
+  <!-- JSCookie library -->
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+
+  <!-- Our custom js -->
+  <script src="js/cyclewithme.js"></script>
 </body>
+
 </html>

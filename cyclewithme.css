@@ -57,9 +57,14 @@ a.signup {
     display: none
 }
 
-/* The button for new routes */
-#newroutebutton {
-    position: fixed;
-    bottom: 1em;
-    right: 1em;
+#addnewroutediv {
+    margin-top: 2em;
+}
+
+/* Improve the formatting of the new route form */
+.col-form-label {
+    text-align: right;
+}
+.custom-file-label {
+    text-align: left;
 }
