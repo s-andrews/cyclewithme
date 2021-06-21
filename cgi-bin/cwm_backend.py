@@ -17,6 +17,11 @@ def main():
     
     # get_average_lon_lat_from_gpx("EXAMPLEIDWILLBERANDOM",2)
     form = cgi.FieldStorage()
+
+    if not "action" in form:
+        print("Content-type: text/plain; charset=utf-8\n\nNo action")
+        return
+
     if form["action"].value == "gpx":
         get_gpx(form["ride_id"].value,form["route"].value)
 
@@ -57,7 +62,7 @@ def new_event(title,date):
 
      rides.insert_one(ride)
 
-     print("Content-type: text/plain\n\n"+ride['ride_id']+" "+ride['admin_id'], end="")
+     print("Content-type: text/plain; charset=utf-8\n\n"+ride['ride_id']+" "+ride['admin_id'], end="")
 
 
 def generate_id(size):
@@ -84,7 +89,7 @@ def delete_route(ride_id,admin_id,route_number):
             ride["routes"].pop(i)
             rides.update({"ride_id":ride_id},ride)
 
-            print("Content-type: text/plain\n\nTrue")
+            print("Content-type: text/plain; charset=utf-8\n\nTrue")
             return
 
     raise Exception(f"Couldn't find route to remove matching {route_number} checked {seen_routes}")
@@ -135,7 +140,7 @@ def add_new_route(form):
 
     rides.update({"ride_id":form["ride_id"].value},ride)
 
-    print("Content-type: text/plain\n\nTrue")
+    print("Content-type: text/plain; charset=utf-8\n\nTrue")
 
 
 
@@ -180,7 +185,7 @@ def signup(ride, route_number, name, guid):
 
     rides.update({"ride_id":ride},json_data)
 
-    print(f"Content-type: text/plain\n\n{route_number}", end="")
+    print(f"Content-type: text/plain; charset=utf-8\n\n{route_number}", end="")
 
 def withdraw(ride, route_number, guid):
     json_data = rides.find_one({"ride_id":ride})
@@ -202,13 +207,13 @@ def withdraw(ride, route_number, guid):
 
     rides.update({"ride_id":ride},json_data)
 
-    print(f"Content-type: text/plain\n\n{route_number}", end="")
+    print(f"Content-type: text/plain; charset=utf-8\n\n{route_number}", end="")
 
 
 def validate_admin(ride, admin):
     
     if rides.find_one({"ride_id":ride, "admin_id":admin}):
-        print("Content-type: text/plain\n\nTrue")
+        print("Content-type: text/plain; charset=utf-8\n\nTrue")
 
     else:
         raise Exception(f"Admin IDs didn't match")
