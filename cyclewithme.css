@@ -56,3 +56,10 @@ a.signup {
 .hidden {
     display: none
 }
+
+/* The button for new routes */
+#newroutebutton {
+    position: fixed;
+    bottom: 1em;
+    right: 1em;
+}

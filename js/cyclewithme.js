@@ -24,6 +24,11 @@ $( document ).ready(function() {
         e.preventDefault()
         add_new_route()
     })
+
+    // Add newroute button handler
+    $("#newroutebutton").click(function(){
+        $("#newroutemodal").modal("show")
+    })
 });
 
 
