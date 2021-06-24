@@ -9,8 +9,14 @@ img.route {
     width: 100%;
 }
 
-/* Make the signup buttons wider */
+/* Make the signup and widthdraw buttons wider */
 a.signup {
+    padding-left: 3em;
+    padding-right: 3em;
+    margin: 1em;
+}
+
+a.withdraw {
     padding-left: 3em;
     padding-right: 3em;
     margin: 1em;
