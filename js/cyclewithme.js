@@ -501,30 +501,36 @@ function rebind_signup_buttons() {
 
 function load_map(route_number, lat, lon) {
 
-    console.log("Loading map for route "+route_number)
+    let style = {
+        'MultiLineString': new ol.style.Style({
+          stroke: new ol.style.Stroke({
+            color: '#a00',
+            width: 4
+          })
+        })
+      };
 
-    let map = new OpenLayers.Map("map"+route_number);
-
-    let mapnik = new OpenLayers.Layer.OSM();
-
-    let fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
-    let toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
-    let position       = new OpenLayers.LonLat(lon,lat).transform( fromProjection, toProjection);
-    let zoom           = 10; 
-
-    map.addLayer(mapnik);
-
-    // Add the Layer with the GPX Track
-    let lgpx = new OpenLayers.Layer.Vector("Route", {
-        strategies: [new OpenLayers.Strategy.Fixed()],
-        protocol: new OpenLayers.Protocol.HTTP({
-            url: "/cgi-bin/cwm_backend.py?action=gpx&ride_id="+ride_id+"&route="+route_number,
-            format: new OpenLayers.Format.GPX()
+    let vector = new ol.layer.Vector({
+        source: new ol.source.Vector({
+          url: "/cgi-bin/cwm_backend.py?action=gpx&ride_id="+ride_id+"&route="+route_number,
+          format: new ol.format.GPX()
         }),
-        style: {strokeColor: "red", strokeWidth: 5, strokeOpacity: 0.5},
-        projection: new OpenLayers.Projection("EPSG:4326")
-    });
-    map.addLayer(lgpx);
+        style: function(feature) {
+          return style[feature.getGeometry().getType()];
+        }
+      });
 
-    map.setCenter(position, zoom );
+    new ol.Map({
+        target: "map"+route_number,
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          }),
+          vector
+        ],
+        view: new ol.View({
+          center: ol.proj.fromLonLat([lon, lat]),
+          zoom: 10
+        })
+    })
 }
