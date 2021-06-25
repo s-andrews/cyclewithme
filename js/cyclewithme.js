@@ -23,6 +23,7 @@ $( document ).ready(function() {
         console.log("Clicked Submit")
         e.preventDefault()
         add_new_route()
+        $("#newroutemodal").modal("hide")
     })
 
     // Add newroute button handler
