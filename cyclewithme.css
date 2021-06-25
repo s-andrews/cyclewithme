@@ -28,6 +28,14 @@ a.withdraw {
     min-height: 15em;
 }
 
+.gpxdownload {
+    position: absolute;
+    bottom: 0;
+    right: 15px;
+    z-index: 100000;
+}
+
+
 /* Move the strange placement of the map copyright notice */
 .ol-attribution {
     position:absolute;

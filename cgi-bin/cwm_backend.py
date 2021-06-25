@@ -224,7 +224,8 @@ def get_gpx(ride_id, route_number):
 
     for route in ride["routes"]:
         if (route["number"] == route_number):
-            print("Content-type: text/xml\n")
+            print("Content-Disposition:attachment;filename=route.gpx")
+            print("Content-type: application/gpx+xml\n")
             print(route["gpx"])
             return
 

@@ -373,7 +373,9 @@ function update_ride(json) {
 
                         </div>
                         <div class="col-md-7">
-                            <div id="map${route.number}" class="map"></div>
+                            <div id="map${route.number}" class="map">
+                            <a class="btn btn-dark btn-sm gpxdownload" href="/cgi-bin/cwm_backend.py?action=gpx&ride_id=${ride_id}&route=${route.number}" role="button">Download GPX</a>
+                            </div>
                         </div>
                     </div>
                 </div>
