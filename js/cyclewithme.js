@@ -168,7 +168,6 @@ function add_new_route() {
     let description = $("#newdescription").val()
     let start = $("#newstart").val()
     let departs = $("#newdeparts").val()
-    let distance = $("#newdistance").val()
     let pace = $("#newpace").val()
     let stop = $("#newstop").val()
     let leader = $("#newleader").val()
@@ -186,7 +185,6 @@ function add_new_route() {
     data.append("description",description);
     data.append("start",start);
     data.append("departs",departs);
-    data.append("distance",distance);
     data.append("pace",pace);
     data.append("stop",stop);
     data.append("leader",leader);

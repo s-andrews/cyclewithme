@@ -6,6 +6,7 @@ from xml.dom.minidom import parse
 import xml.dom.minidom
 import cgi
 import cgitb
+from math import cos, asin, sqrt, pi
 cgitb.enable()
 
 def main():
@@ -95,8 +96,6 @@ def delete_route(ride_id,admin_id,route_number):
     raise Exception(f"Couldn't find route to remove matching {route_number} checked {seen_routes}")
    
 
-
-
 def add_new_route(form):
 
     ride = rides.find_one({"ride_id":form["ride_id"].value})
@@ -117,7 +116,7 @@ def add_new_route(form):
     gpx_file = form["gpx"]
     gpx = gpx_file.file.read().decode("UTF-8")
 
-    lat,lon = get_average_lon_lat_from_gpx(gpx)
+    lat,lon,distance = get_stats_from_gpx(gpx)
 
     new_route = {
             "number": str(highest_route),
@@ -125,7 +124,7 @@ def add_new_route(form):
             "description" : form["description"].value,
             "start_time": form["start"].value,
             "departs": form["departs"].value,
-            "distance" : form["distance"].value,
+            "distance": round(distance,1),
             "pace": form["pace"].value,
             "stop": form["stop"].value,
             "leader": form["leader"].value,
@@ -233,7 +232,7 @@ def get_gpx(ride_id, route_number):
 
 
 
-def get_average_lon_lat_from_gpx(gpx_data):
+def get_stats_from_gpx(gpx_data):
 
     # Open XML document using minidom parser
     DOMTree = xml.dom.minidom.parseString(gpx_data)
@@ -241,17 +240,56 @@ def get_average_lon_lat_from_gpx(gpx_data):
 
     points = collection.getElementsByTagName("trkpt")
 
-    lat = 0
-    lon = 0
+    lat_max = 0
+    lat_min = 0
+    lon_max = 0
+    lon_min = 0
 
-    for point in points:
-        lat += float(point.getAttribute("lat"))
-        lon += float(point.getAttribute("lon"))
+    last_lat = 0
+    last_lon = 0
 
-    lat /= len(points)
-    lon /= len(points)
+    distance = 0
 
-    return(lat,lon)
+    for i,point in enumerate(points):
+        this_lat = float(point.getAttribute("lat"))
+        this_lon = float(point.getAttribute("lon"))
+
+        if i==0:
+            lat_max = this_lat
+            lat_min = this_lat
+            lon_max = this_lon
+            lon_min = this_lon
+
+        else:
+            if this_lat > lat_max:
+                lat_max = this_lat
+            if this_lat < lat_min:
+                lat_min = this_lat
+            if this_lon > lon_max:
+                lon_max = this_lon
+            if this_lon < lon_min:
+                lon_min = this_lon
+
+            # Calculate the distance from the last
+            # point to this one
+            p = pi/180
+            a = 0.5 - cos((this_lat-last_lat)*p)/2 + cos(last_lat*p) * cos(this_lat*p) * (1-cos((this_lon-last_lon)*p))/2
+            distance += 12742 * asin(sqrt(a))
+
+
+        last_lat = this_lat
+        last_lon = this_lon
+
+
+
+    mid_lat = (lat_min+lat_max)/2
+    mid_lon = (lon_min+lon_max)/2
+
+    # Convert distance from km to miles
+    distance *= 0.621
+
+
+    return(mid_lat,mid_lon,distance)
 
 
 
