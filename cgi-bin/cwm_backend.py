@@ -27,7 +27,7 @@ def main():
         get_gpx(form["ride_id"].value,form["route"].value)
 
     elif form["action"].value == "json":
-        get_json(form["ride"].value)
+        get_json(form["ride"].value, form["guid"].value)
 
     elif form["action"].value == "signup":
         signup(form["ride"].value,form["route"].value, form["name"].value, form["guid"].value)
@@ -144,13 +144,20 @@ def add_new_route(form):
 
 
 
-def get_json(ride_id):
+def get_json(ride_id,guid):
+    # We need the user's guid so we can only
+    # return their guids in the answer
     json_content = rides.find_one({"ride_id":ride_id})
 
     json_content.pop("_id")
     json_content.pop("admin_id")
 
     for route in json_content["routes"]:
+        # Hide all guids but the users own
+        for joined in route["joined"]:
+            if joined["guid"] != guid:
+                joined["guid"] = ""
+
         route.pop("gpx")
 
     print("Content-type: application/json\n")
