@@ -249,7 +249,6 @@ function get_ride() {
         update_ride(null);
     }
     else {
-        // TODO: Set up the page for creating a new ride
         $("#showevent").hide();
         populate_new_ride()
     }
@@ -274,7 +273,10 @@ function validate_admin(ride,admin) {
                 console.log("Response='"+x+"'")
                 if (x.trim() == "True"){
                     is_admin = true
-                 $(".adminonly").show()
+                    // Set the links on the invites
+                    $("#invitelink").attr("href","/?ride="+ride_id)
+                    $("#admininvitelink").attr("href","/?ride="+ride_id+"&admin="+admin_id)
+                    $(".adminonly").show()
                 }
             }
         }

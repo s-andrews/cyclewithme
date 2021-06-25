@@ -80,7 +80,6 @@
             <input type="submit" class="form-control btn-success" id="neweventsubmit" value="Create New Event">
           </div>
         </div>
-
       </form>
     </div>
   </div>
@@ -93,6 +92,12 @@
         <h1 id="eventtitle" class="display-4"></h1>
         <h2 id="eventdate" class="display-5"></h2>
       </div>
+    </div>
+
+    <!-- Show the links to the event for users and admins -->
+    <div class="adminonly container">
+      <div class="alert alert-success invitealert" role="alert">Send <a id="invitelink" href="#">THIS LINK</a> to people you want to invite to this event</div>
+      <div class="alert alert-warning invitealert" role="alert">Send <a id="admininvitelink" href="#">THIS LINK</a> to others you want to administer this event</div>
     </div>
 
     <!-- Details of the routes -->

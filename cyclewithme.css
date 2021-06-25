@@ -90,3 +90,9 @@ a.withdraw {
 .custom-file-label {
     text-align: left;
 }
+
+/* Put invites in the centre of the screen */
+.invitealert {
+    text-align: center;
+    margin:0;
+}
