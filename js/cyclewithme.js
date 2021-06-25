@@ -286,16 +286,23 @@ function validate_admin(ride,admin) {
 
 function update_ride(json) {
 
+    // Check our guid against signups
+    let guid = Cookies.get("cwmguid")
+
+
     // Either request the json for this ride, or parse it to update the view
     if (json == null) {
-        // Send an ajax request for the json file
+        // Send an ajax request for the json file.  We send the guid so 
+        // it can be annotated with whether we're going or not and we don't have
+        // to see other people's guids.
 
         $.ajax(
             {
                 url: "/cgi-bin/cwm_backend.py",
                 data: {
                     action: "json",
-                    ride: ride_id
+                    ride: ride_id,
+                    guid: guid
                 },
                 success: function(x) {
                     update_ride(x)
@@ -322,9 +329,6 @@ function update_ride(json) {
 
     // Clear any existing route data
     $("#routes").html("")
-
-    // Check our guid against signups
-    let guid = Cookies.get("cwmguid")
 
     for (i in json.routes) {
         let route = json.routes[i];
