@@ -37,6 +37,8 @@ $( document ).ready(function() {
         $("#newstop").val("")
         $("#newleader").val("")
         $("#newspaces").val("")
+        $("#newgpx")[0].value = ""
+        $('.custom-file-label').html("Select GPX file")
         
         $("#newroutemodal").modal("show")
     })
