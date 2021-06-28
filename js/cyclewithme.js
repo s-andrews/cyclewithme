@@ -28,6 +28,17 @@ $( document ).ready(function() {
 
     // Add newroute button handler
     $("#newroutebutton").click(function(){
+        $("#neweditroutetitle").html("Add New Route")
+        $("#newroutenumber").val("")
+        $("#newtitle").val("")
+        $("#newdescription").val("")
+        $("#newstart").val("")
+        $("#newdeparts").val("")
+        $("#newpace").val("")
+        $("#newstop").val("")
+        $("#newleader").val("")
+        $("#newspaces").val("")
+        
         $("#newroutemodal").modal("show")
     })
 
@@ -36,7 +47,7 @@ $( document ).ready(function() {
         e.preventDefault()
         create_new_event()
     })
-
+    
     // Make the file upload actually show the 
     // file name
     $('input[type="file"]').change(function(e){
@@ -44,6 +55,37 @@ $( document ).ready(function() {
         $('.custom-file-label').html(fileName);
     });
 });
+
+
+function edit_route(route_number) {
+    // Get the data for this route and fill
+    // in the edit form
+
+    $.ajax(
+        {
+            url: "/cgi-bin/cwm_backend.py",
+            data: {
+                action: "getroute",
+                ride: ride_id,
+                route: route_number
+            },
+            success: function(route_json) {
+                $("#neweditroutetitle").html("Edit Route")
+                $("#newroutenumber").val(route_json["number"])
+                $("#newtitle").val(route_json["name"])
+                $("#newdescription").val(route_json["description"])
+                $("#newstart").val(route_json["start"])
+                $("#newdeparts").val(route_json["departs"])
+                $("#newpace").val(route_json["pace"])
+                $("#newstop").val(route_json["stop"])
+                $("#newleader").val(route_json["leader"])
+                $("#newspaces").val(route_json["spaces"])
+
+                $("#newroutemodal").modal("show")
+
+            }
+        });
+}
 
 
 function create_new_event() {
@@ -89,8 +131,6 @@ function generate_guid() {
 function complete_signup() {
     // Get the route number from the data attribute 
     // on the submit button
-
-    // TODO: Check there's space
 
     let route_number = $("#modalsignupbutton").data("routenumber")
 
@@ -165,6 +205,14 @@ function complete_signup() {
 
 function add_new_route() {
 
+    // This is used to both add a new route and
+    // to edit an existing route
+
+    // If it's an existing route there will be
+    // a value in newroutenumber
+
+    let existingroutenumber = $("#newroutenumber").val()
+
     let title = $("#newtitle").val()
     let description = $("#newdescription").val()
     let start = $("#newstart").val()
@@ -173,12 +221,16 @@ function add_new_route() {
     let stop = $("#newstop").val()
     let leader = $("#newleader").val()
     let spaces = $("#newspaces").val()
+
+    // For an edited ride the gpx may be
+    // empty
     let gpx = $("#newgpx")[0].files[0]
 
     // Submit this to the back end.
 
     let data = new FormData();
 
+    data.append("route_number", existingroutenumber);
     data.append("action","new_route");
     data.append("ride_id",ride_id),
     data.append("admin_id",admin_id),
@@ -381,7 +433,8 @@ function update_ride(json) {
                             </ul>
                             <div class="text-center">
                                 <a href="#" data-routenumber="${route.number}" class="btn ${button_class}">${button_text}</a>
-                                <a href="#" data-routenumber="${route.number}" class="btn btn-danger deleteroute adminonly">Delete Route</a>
+                                <a href="#" data-routenumber="${route.number}" class="btn btn-danger deleteroute adminonly">Delete</a>
+                                <a href="#" data-routenumber="${route.number}" class="btn btn-primary editroute adminonly">Edit</a>
                             </div>
 
                         </div>
@@ -453,6 +506,13 @@ function rebind_signup_buttons() {
         $("#signupmodal").modal("show")
     })
 
+    // Enable any edit buttons
+    $(".editroute").unbind()
+    $(".editroute").click(function(e) {
+        e.preventDefault()
+        edit_route($(this).data("routenumber"))
+    })
+    
     // Enable the withdraw buttons
     $(".withdraw").unbind()
     $(".withdraw").click(function(e) {

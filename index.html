@@ -122,7 +122,7 @@
                     <div class="row">
                       <div class="col-md-2"></div>
                       <div class="col-md-8">
-                        <h3 class="card-title">Add New Route</h3>
+                        <h3 id="neweditroutetitle" class="card-title">Add New Route</h3>
                         <form>
                           <div class="form-group row">
                             <label for="newtitle" class="col-sm-4 col-form-label">Route Title</label>
@@ -196,6 +196,8 @@
                             </div>
                           </div>
 
+                          <!-- A hidden input used to say when we're editing rather than creating -->
+                          <input id="newroutenumber" type="hidden" value="">
 
                           <div class="form-group row">
                             <div class="col-sm-12">

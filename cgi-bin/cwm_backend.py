@@ -32,6 +32,9 @@ def main():
     elif form["action"].value == "signup":
         signup(form["ride"].value,form["route"].value, form["name"].value, form["guid"].value)
 
+    elif form["action"].value == "getroute":
+        get_route(form["ride"].value,form["route"].value)
+
     elif form["action"].value == "withdraw":
         withdraw(form["ride"].value,form["route"].value, form["guid"].value)
 
@@ -39,7 +42,7 @@ def main():
         validate_admin(form["ride"].value,form["admin"].value)
 
     elif form["action"].value == "new_route":
-        add_new_route(form)
+        add_edit_route(form)
 
     elif form["action"].value == "delete_route":
         delete_route(form["ride"].value,form["admin"].value, form["route"].value)
@@ -96,46 +99,84 @@ def delete_route(ride_id,admin_id,route_number):
     raise Exception(f"Couldn't find route to remove matching {route_number} checked {seen_routes}")
    
 
-def add_new_route(form):
+def add_edit_route(form):
+
+    # This same function is used to either edit an existing
+    # route or add a new one.  If they supply a route_number
+    # then they're editing rather than adding.
 
     ride = rides.find_one({"ride_id":form["ride_id"].value})
 
     if ride["admin_id"] != form["admin_id"].value:
         raise Exception("Invalid admin id for ride")
 
-    highest_route = 0
+    # See if they supplied an existing route number
+    if form["route_number"].value:
+        existing_number = int(form["route_number"].value)
+        # We're editing an existing route
+        for route in ride["routes"]:
+            number = int(route["number"])
+            if number == existing_number:
+                # This is the route we're editing
+                route = route
+                route["name"] = form["title"].value
+                route["description"] = form["description"].value
+                route["start_time"] = form["start"].value
+                route["departs"] = form["departs"].value
+                route["pace"] = form["pace"].value
+                route["stop"] = form["stop"].value
+                route["leader"] =  form["leader"].value
+                route["spaces"] = form["spaces"].value
 
-    for route in ride["routes"]:
-        number = int(route["number"])
-        if number > highest_route:
-            highest_route = number
+                # If they supplied a gpx file we need to add 
+                # the data from that too.
+                # If there's no file then it will just be a 
+                # string here
+                # raise Exception(f"gpx is {type(form['gpx'].value)}")
+                if not isinstance(form['gpx'].value,str):
+                    gpx_file = form["gpx"]
+                    gpx = gpx_file.file.read().decode("UTF-8")
+                    lat,lon,distance = get_stats_from_gpx(gpx)
+                    route["gpx"] = gpx
+                    route["lat"] = str(lat)
+                    route["lon"] = str(lon)
+                    route["distance"] = round(distance,1)
+                
+                break
 
-    
-    highest_route += 1
+    else:
+        highest_route = 0
+        for route in ride["routes"]:
+            number = int(route["number"])
+            if number > highest_route:
+                highest_route = number
 
-    gpx_file = form["gpx"]
-    gpx = gpx_file.file.read().decode("UTF-8")
+        
+        highest_route += 1
 
-    lat,lon,distance = get_stats_from_gpx(gpx)
+        gpx_file = form["gpx"]
+        gpx = gpx_file.file.read().decode("UTF-8")
 
-    new_route = {
-            "number": str(highest_route),
-            "name": form["title"].value,
-            "description" : form["description"].value,
-            "start_time": form["start"].value,
-            "departs": form["departs"].value,
-            "distance": round(distance,1),
-            "pace": form["pace"].value,
-            "stop": form["stop"].value,
-            "leader": form["leader"].value,
-            "spaces": form["spaces"].value,
-            "gpx": gpx,
-            "lat": str(lat),
-            "lon": str(lon),
-            "joined" : []
-        }
+        lat,lon,distance = get_stats_from_gpx(gpx)
 
-    ride["routes"].append(new_route)
+        new_route = {
+                "number": str(highest_route),
+                "name": form["title"].value,
+                "description" : form["description"].value,
+                "start_time": form["start"].value,
+                "departs": form["departs"].value,
+                "distance": round(distance,1),
+                "pace": form["pace"].value,
+                "stop": form["stop"].value,
+                "leader": form["leader"].value,
+                "spaces": form["spaces"].value,
+                "gpx": gpx,
+                "lat": str(lat),
+                "lon": str(lon),
+                "joined" : []
+            }
+
+        ride["routes"].append(new_route)
 
     rides.update({"ride_id":form["ride_id"].value},ride)
 
@@ -161,6 +202,20 @@ def get_json(ride_id,guid):
     print("Content-type: application/json\n")
 
     print(json.dumps(json_content))
+
+
+def get_route(ride, route_number):
+    json_data = rides.find_one({"ride_id":ride})
+
+    found_route = False
+    for route in json_data["routes"]:
+        if route["number"] == route_number:
+            route.pop("joined")
+            print("Content-type: application/json\n")
+            print(json.dumps(route))
+            return
+
+    raise Exception(f"Couldn't find route '{route_number}'")
 
 
 def signup(ride, route_number, name, guid):
