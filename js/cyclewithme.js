@@ -20,7 +20,6 @@ $( document ).ready(function() {
 
     // Add a handler for the new route submission button
     $("#newroutesubmit").click(function(e){
-        console.log("Clicked Submit")
         e.preventDefault()
         add_new_route()
         $("#newroutemodal").modal("hide")
@@ -159,7 +158,6 @@ function complete_signup() {
                 // We need to modify the code for
                 // the ride to show that we're 
                 // signed up
-                console.log("Signed up for "+route_number)
 
                 // List the signup buttons
                 let signup_buttons = $(".signup")
@@ -322,7 +320,6 @@ function validate_admin(ride,admin) {
                 admin: admin
             },
             success: function(x) {
-                console.log("Response='"+x+"'")
                 if (x.trim() == "True"){
                     is_admin = true
                     // Set the links on the invites
@@ -340,8 +337,6 @@ function update_ride(json) {
 
     // Check our guid against signups
     let guid = Cookies.get("cwmguid")
-
-    console.log("json is "+json)
 
     // Either request the json for this ride, or parse it to update the view
     if (json == null) {
@@ -533,7 +528,6 @@ function rebind_signup_buttons() {
                     // We need to modify the code for
                     // the ride to show that we're 
                     // signed up
-                    console.log("Withdrawn from "+route_number)
 
                     // List the withdraw buttons
                     let withdraw_buttons = $(".withdraw")
