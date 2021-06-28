@@ -4,6 +4,8 @@ import random
 from pymongo import MongoClient
 from xml.dom.minidom import parse
 import xml.dom.minidom
+from icalendar import Calendar, Event
+from datetime import datetime
 import cgi
 import cgitb
 from math import cos, asin, sqrt, pi
@@ -25,6 +27,9 @@ def main():
 
     if form["action"].value == "gpx":
         get_gpx(form["ride_id"].value,form["route"].value)
+
+    if form["action"].value == "ics":
+        get_ics(form["ride_id"].value,form["route"].value)
 
     elif form["action"].value == "json":
         get_json(form["ride"].value, form["guid"].value)
@@ -290,6 +295,36 @@ def get_gpx(ride_id, route_number):
             return
 
     raise Exception(f"Couldn't find gpx for ride={ride_id} route={route_number}")
+
+
+def get_ics(ride_id, route_number):
+    ride = rides.find_one({"ride_id":ride_id})
+
+    for route in ride["routes"]:
+        if (route["number"] == route_number):
+            # Create a calendar object
+            cal = Calendar()
+            event = Event()
+
+
+            # We need a datetime string with the 
+            # year month day hour minute in it
+            ymd = [int(x) for x in ride["date"].split("-")]
+            hm = [int(x) for x in route["start_time"].split(":")]
+
+            event.add('dtstart', datetime(ymd[0],ymd[1],ymd[2],hm[0],hm[1],0))
+            event.add('dtend', datetime(ymd[0],ymd[1],ymd[2],hm[0]+1,hm[1],0))
+            event.add('summary',ride["name"])
+            event.add('description',f"{route['name']} : {route['description']}\nDeparting {route['departs']}")
+
+            cal.add_component(event)
+
+            print("Content-type: text/calendar; charset=utf-8\n")
+            print(cal.to_ical().decode("utf-8"))
+            return
+
+    raise Exception(f"Couldn't find ics for ride={ride_id} route={route_number}")
+
 
 
 
