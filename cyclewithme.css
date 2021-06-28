@@ -77,6 +77,10 @@ a.signup {
     margin-top: 2em;
 }
 
+.alert a {
+    color: #155724;
+}
+
 /* Improve the formatting of the new route form */
 .col-form-label {
     text-align: right;
