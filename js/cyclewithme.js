@@ -2,8 +2,6 @@ $( document ).ready(function() {
 
     is_admin = false
 
-    get_ride()
-
     // Check the guid
     guid = Cookies.get("cwmguid")
     if (! guid) {
@@ -11,6 +9,8 @@ $( document ).ready(function() {
     }
     // Update or set the guid cookie
     Cookies.set("cwmguid",guid,{ 'samesite': 'strict', 'expires': 365 })
+
+    get_ride()
 
     // Add a handler for the signup submission
     $("#modalsignupbutton").click(function(e){
@@ -289,6 +289,7 @@ function update_ride(json) {
     // Check our guid against signups
     let guid = Cookies.get("cwmguid")
 
+    console.log("json is "+json)
 
     // Either request the json for this ride, or parse it to update the view
     if (json == null) {
@@ -351,6 +352,12 @@ function update_ride(json) {
             button_text = "Widthdraw"
             button_class = "btn-warning withdraw"
             alert_class = ""
+        }
+
+        if (joined_names.length >= route.spaces) {
+            // The ride is full
+            button_text = "Ride Full"
+            button_class = "btn-primary disabled"
         }
 
         $("#routes").append(`

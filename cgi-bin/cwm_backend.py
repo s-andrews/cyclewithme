@@ -142,8 +142,6 @@ def add_new_route(form):
     print("Content-type: text/plain; charset=utf-8\n\nTrue")
 
 
-
-
 def get_json(ride_id,guid):
     # We need the user's guid so we can only
     # return their guids in the answer
@@ -179,10 +177,10 @@ def signup(ride, route_number, name, guid):
                     already_signed = True
                     break
 
-            if not already_signed:
+            if not already_signed and len(route["joined"]) < int(route["spaces"]):
                 route["joined"].append({"guid":guid, "name":name})
             else:
-                raise Exception("Already signed")
+                raise Exception("Already signed or route full")
             
             break
 
