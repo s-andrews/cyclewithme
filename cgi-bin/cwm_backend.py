@@ -28,7 +28,7 @@ def main():
     if form["action"].value == "gpx":
         get_gpx(form["ride_id"].value,form["route"].value)
 
-    if form["action"].value == "ics":
+    elif form["action"].value == "ics":
         get_ics(form["ride_id"].value,form["route"].value)
 
     elif form["action"].value == "json":
@@ -42,6 +42,9 @@ def main():
 
     elif form["action"].value == "withdraw":
         withdraw(form["ride"].value,form["route"].value, form["guid"].value)
+
+    elif form["action"].value == "withdrawadmin":
+        withdraw(form["ride"].value,form["route"].value, form["name"].value, form["guid"].value, form["admin"].value)
 
     elif form["action"].value == "validate_admin":
         validate_admin(form["ride"].value,form["admin"].value)
@@ -61,7 +64,11 @@ def main():
 
 
 def new_event(title,date):
-     ride = {
+    """
+    Creates a new event and puts it into the database
+    """
+
+    ride = {
          "ride_id": generate_id(10),
          "admin_id": generate_id(10),   
          "name": title,
@@ -69,12 +76,16 @@ def new_event(title,date):
          "routes" : []
      }
 
-     rides.insert_one(ride)
+    rides.insert_one(ride)
 
-     print("Content-type: text/plain; charset=utf-8\n\n"+ride['ride_id']+" "+ride['admin_id'], end="")
+    print("Content-type: text/plain; charset=utf-8\n\n"+ride['ride_id']+" "+ride['admin_id'], end="")
 
 
 def generate_id(size):
+    """
+    Generic function used for creating IDs for both
+    events and admin authentication
+    """
     letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
     code = ""
@@ -86,6 +97,10 @@ def generate_id(size):
 
 
 def delete_route(ride_id,admin_id,route_number):
+    """
+    Completely removes a route from an event including
+    the gpx and the signup information.
+    """
     ride = rides.find_one({"ride_id":ride_id})
 
     if ride["admin_id"] != admin_id:
@@ -105,10 +120,11 @@ def delete_route(ride_id,admin_id,route_number):
    
 
 def add_edit_route(form):
-
-    # This same function is used to either edit an existing
-    # route or add a new one.  If they supply a route_number
-    # then they're editing rather than adding.
+    """
+    This same function is used to either edit an existing
+    route or add a new one.  If they supply a route_number
+    then they're editing rather than adding.
+    """
 
     ride = rides.find_one({"ride_id":form["ride_id"].value})
 
@@ -189,6 +205,13 @@ def add_edit_route(form):
 
 
 def get_json(ride_id,guid):
+    """
+    Gets the main JSON document covering the whole event
+    and all routes.  We ask for the guid so we can show the
+    rider whether they are signed up for anything, but we 
+    remove all of the other guids so they don't see other
+    people's data.
+    """
     # We need the user's guid so we can only
     # return their guids in the answer
     json_content = rides.find_one({"ride_id":ride_id})
@@ -210,6 +233,11 @@ def get_json(ride_id,guid):
 
 
 def get_route(ride, route_number):
+    """
+    Used for populating the edit route dialog.  Gets
+    the JSON for a single route, but removes the signup
+    information (including guids)
+    """
     json_data = rides.find_one({"ride_id":ride})
 
     found_route = False
@@ -224,6 +252,14 @@ def get_route(ride, route_number):
 
 
 def signup(ride, route_number, name, guid):
+    """
+    Adds a new signup to a ride.  The guid must be present
+    unless this is being instigated by an admin
+    """
+
+    if guid.strip() == "":
+        raise Exception(f"Only admins can sign up riders without a guid")
+
     json_data = rides.find_one({"ride_id":ride})
 
     found_route = False
@@ -252,6 +288,15 @@ def signup(ride, route_number, name, guid):
     print(f"Content-type: text/plain; charset=utf-8\n\n{route_number}", end="")
 
 def withdraw(ride, route_number, guid):
+    """
+    Processes a user-initiated withdrawl.  The guid must
+    be present and correct.  Admins can bypass this with
+    the withdrawadmin function which is less picky
+    """
+
+    if guid.strip() == "":
+        raise Exception(f"Won't withdraw a blank guid")
+
     json_data = rides.find_one({"ride_id":ride})
 
     found_route = False
@@ -273,6 +318,61 @@ def withdraw(ride, route_number, guid):
 
     print(f"Content-type: text/plain; charset=utf-8\n\n{route_number}", end="")
 
+
+def withdrawadmin(ride, route_number, guid, name, admin_id):
+    """
+    Processes a withdrawl but here we can allow this for another
+    user because they will authenticate as admins.  This also 
+    allows removing registrations without a guid (ie those made)
+    by an admin
+    """
+
+    json_data = rides.find_one({"ride_id":ride})
+
+    if ride["admin_id"] != admin_id:
+        raise Exception("Invalid admin id for ride")
+
+    found_route = False
+    for route in json_data["routes"]:
+        if route["number"] == route_number:
+            new_joined = []
+            found_route = True
+            for joined in route["joined"]:
+                if joined["guid"] == guid and joined["name"] == name:
+                    continue
+
+                new_joined.append(joined)
+
+            route["joined"] = new_joined            
+            break
+
+    if not found_route:
+        raise Exception(f"Couldn't find route '{route_number}'")
+
+    rides.update({"ride_id":ride},json_data)
+
+    print(f"Content-type: text/plain; charset=utf-8\n\n{route_number}", end="")
+
+
+def list_joined_admin(ride,route,admin_id):
+    """
+    Gets the json for the signups for a specific
+    route.  Doesn't redact the guids, but we may
+    want to rethink this as it does expose guids
+    to any admin of an event you've signed up for
+    """
+    json_data = rides.find_one({"ride_id":ride})
+
+    if ride["admin_id"] != admin_id:
+        raise Exception("Invalid admin id for ride")
+
+    for route in json_data["routes"]:
+        if route["number"] == route:
+            print("Content-type: application/json\n")
+            print(json.dumps(route["joined"]))
+            return
+
+    raise Exception(f"Couldn't find route '{route}'")
 
 def validate_admin(ride, admin):
     
