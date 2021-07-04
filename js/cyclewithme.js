@@ -413,7 +413,7 @@ function update_ride(json) {
             alert_class = ""
         }
 
-        if (joined_names.length >= route.spaces) {
+        else if (joined_names.length >= route.spaces) {
             // The ride is full
             button_text = "Ride Full"
             button_class = "btn-primary disabled"
