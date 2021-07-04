@@ -94,3 +94,12 @@ a.signup {
     text-align: center;
     margin:0;
 }
+
+.jumbotron {
+    padding: 1rem 1rem;
+}
+
+.card {
+    border-width: 2px;
+    background-color: #e9ecef;
+}
