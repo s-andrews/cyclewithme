@@ -75,7 +75,7 @@
         </div>
       </form>
     </div>
-  </div>
+  </div> <!-- End new ride instructions -->
 
 
   <div id="showevent">
@@ -102,105 +102,111 @@
     <div id="addnewroutediv" class="container adminonly text-center">
       <button id="newroutebutton" type="button" class="btn btn-success btn-lg">+ Add New Route</button>
     </div>
+  </div> <!-- End of show event -->
 
-    <div id="newroutemodal" class="modal" tabindex="-1" role="dialog">
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="container text-center">
-            <div class="row">
-              <div class="col-lg-12">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-md-2"></div>
-                      <div class="col-md-8">
-                        <h3 id="neweditroutetitle" class="card-title">Add New Route</h3>
-                        <form>
-                          <div class="form-group row">
-                            <label for="newtitle" class="col-sm-4 col-form-label">Route Title</label>
-                            <div class="col-sm-8">
-                              <input type="text" class="form-control" id="newtitle">
-                            </div>
+  <div id="footer" class="bg-dark text-light">CycleWith.me &copy;2021 Simon Andrews. Please <a
+    href="https://github.com/s-andrews/cyclewithme/issues">report any problems</a>
+  </div>
+
+
+  <!-- Modals below this-->
+  <div id="newroutemodal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="container text-center">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                      <h3 id="neweditroutetitle" class="card-title">Add New Route</h3>
+                      <form>
+                        <div class="form-group row">
+                          <label for="newtitle" class="col-sm-4 col-form-label">Route Title</label>
+                          <div class="col-sm-8">
+                            <input type="text" class="form-control" id="newtitle">
                           </div>
+                        </div>
 
-                          <div class="form-group row">
-                            <label for="newdescription" class="col-sm-4 col-form-label">Description</label>
-                            <div class="col-sm-8">
-                              <input type="text" class="form-control" id="newdescription">
-                            </div>
+                        <div class="form-group row">
+                          <label for="newdescription" class="col-sm-4 col-form-label">Description</label>
+                          <div class="col-sm-8">
+                            <input type="text" class="form-control" id="newdescription">
                           </div>
+                        </div>
 
-                          <div class="form-group row">
-                            <label for="newstart" class="col-sm-4 col-form-label">Start Time</label>
-                            <div class="col-sm-8">
-                              <input type="time" class="form-control" id="newstart">
-                            </div>
+                        <div class="form-group row">
+                          <label for="newstart" class="col-sm-4 col-form-label">Start Time</label>
+                          <div class="col-sm-8">
+                            <input type="time" class="form-control" id="newstart">
                           </div>
+                        </div>
 
-                          <div class="form-group row">
-                            <label for="newdeparts" class="col-sm-4 col-form-label">Departs From</label>
-                            <div class="col-sm-8">
-                              <input type="text" class="form-control" id="newdeparts">
-                            </div>
+                        <div class="form-group row">
+                          <label for="newdeparts" class="col-sm-4 col-form-label">Departs From</label>
+                          <div class="col-sm-8">
+                            <input type="text" class="form-control" id="newdeparts">
                           </div>
+                        </div>
 
-                          <div class="form-group row">
-                            <label for="newpace" class="col-sm-4 col-form-label">Pace</label>
-                            <div class="col-sm-8">
-                              <select class="form-control" id="newpace">
-                                <option>Leisurely (~11mph)</option>
-                                <option>Relaxed (~13mph)</option>
-                                <option>Steady (~15mph)</option>
-                                <option>Pushing on (~17mph)</option>
-                                <option>Pacey (~19mph)</option>
-                                <option>Properly Quick (20+mph)</option>
-                              </select>
-                            </div>
+                        <div class="form-group row">
+                          <label for="newpace" class="col-sm-4 col-form-label">Pace</label>
+                          <div class="col-sm-8">
+                            <select class="form-control" id="newpace">
+                              <option>Leisurely (~11mph)</option>
+                              <option>Relaxed (~13mph)</option>
+                              <option>Steady (~15mph)</option>
+                              <option>Pushing on (~17mph)</option>
+                              <option>Pacey (~19mph)</option>
+                              <option>Properly Quick (20+mph)</option>
+                            </select>
                           </div>
+                        </div>
 
-                          <div class="form-group row">
-                            <label for="newstop" class="col-sm-4 col-form-label">Stop Location(s)</label>
-                            <div class="col-sm-8">
-                              <input type="text" class="form-control" id="newstop">
-                            </div>
+                        <div class="form-group row">
+                          <label for="newstop" class="col-sm-4 col-form-label">Stop Location(s)</label>
+                          <div class="col-sm-8">
+                            <input type="text" class="form-control" id="newstop">
                           </div>
+                        </div>
 
-                          <div class="form-group row">
-                            <label for="newleader" class="col-sm-4 col-form-label">Ride Leader(s)</label>
-                            <div class="col-sm-8">
-                              <input type="text" class="form-control" id="newleader">
-                            </div>
+                        <div class="form-group row">
+                          <label for="newleader" class="col-sm-4 col-form-label">Ride Leader(s)</label>
+                          <div class="col-sm-8">
+                            <input type="text" class="form-control" id="newleader">
                           </div>
+                        </div>
 
 
-                          <div class="form-group row">
-                            <label for="newspaces" class="col-sm-4 col-form-label">Spaces</label>
-                            <div class="col-sm-8">
-                              <input type="number" class="form-control" id="newspaces" value=6>
-                            </div>
+                        <div class="form-group row">
+                          <label for="newspaces" class="col-sm-4 col-form-label">Spaces</label>
+                          <div class="col-sm-8">
+                            <input type="number" class="form-control" id="newspaces" value=6>
                           </div>
+                        </div>
 
-                          <div class="form-group row">
-                            <label for="newgpx" class="col-sm-4 col-form-label">GPX File</label>
-                            <div class="col-sm-8 custom-file">
-                              <input type="file" class="custom-file-input" id="newgpx">
-                              <label class="custom-file-label" for="newgpx">Select GPX file</label>
-                            </div>
+                        <div class="form-group row">
+                          <label for="newgpx" class="col-sm-4 col-form-label">GPX File</label>
+                          <div class="col-sm-8 custom-file">
+                            <input type="file" class="custom-file-input" id="newgpx">
+                            <label class="custom-file-label" for="newgpx">Select GPX file</label>
                           </div>
+                        </div>
 
-                          <!-- A hidden input used to say when we're editing rather than creating -->
-                          <input id="newroutenumber" type="hidden" value="">
+                        <!-- A hidden input used to say when we're editing rather than creating -->
+                        <input id="newroutenumber" type="hidden" value="">
 
-                          <div class="form-group row">
-                            <div class="col-sm-12">
-                              <input type="submit" class="form-control btn-success" id="newroutesubmit"
-                                value="Add Route to Ride">
-                            </div>
+                        <div class="form-group row">
+                          <div class="col-sm-12">
+                            <input type="submit" class="form-control btn-success" id="newroutesubmit"
+                              value="Add Route to Ride">
                           </div>
+                        </div>
 
-                        </form>
+                      </form>
 
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -209,7 +215,8 @@
           </div>
         </div>
       </div>
-    </div> <!-- End new route modal -->
+    </div>
+  </div> <!-- End new route modal -->
 
   <!-- Modal used for admin signups / widthdrawls -->
   <div id="adminsignupsmodal" class="modal" tabindex="-1" role="dialog">
@@ -234,17 +241,7 @@
         </div>
       </div>
     </div>
-
-
-
-
-  </div> <!-- End event -->
-
-
-  <div id="footer">CycleWith.me &copy;2021 Simon Andrews. Please <a
-      href="https://github.com/s-andrews/cyclewithme/issues">report any problems</a>
-  </div>
-
+  </div> <!-- End admin signup -->
 
   <!-- Signup Name Modal -->
   <div class="modal fade" id="signupmodal" tabindex="-5" role="dialog" aria-labelledby="signupmodaltitle"
@@ -263,7 +260,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> <!-- End signup -->
 
 
   <!-- Optional JavaScript -->

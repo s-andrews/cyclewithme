@@ -49,11 +49,10 @@ a.signup {
 #footer {
     margin-top: 2em;
     padding: 1em;
-    background-color: lightgrey;
 }
 
 #footer a {
-    color: black;
+    color: #f8f9fa;
 }
 
 /* Who buttons */
