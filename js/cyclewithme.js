@@ -48,6 +48,21 @@ $( document ).ready(function() {
         e.preventDefault()
         create_new_event()
     })
+
+    // Switch from metric to imperial
+    $("#metricimperialswitch").change(function(){
+
+        console.log("Imperial clicked")
+        is_metric = $("#metricimperialswitch")[0].checked
+        if (is_metric) {
+            $(".imperial").hide()
+            $(".metric").show()
+        }
+        else {
+            $(".imperial").show()
+            $(".metric").hide()
+        }
+    })
     
     // Make the file upload actually show the 
     // file name
@@ -439,7 +454,8 @@ function update_ride(json) {
                             <ul>
                                 <li><strong>Start Time:</strong> ${route.start_time}</li>
                                 <li><strong>Departs:</strong> ${route.departs}</li>
-                                <li><strong>Distance:</strong> ${route.distance} miles</li>
+                                <li><strong>Distance:</strong> <span class="metric">${parseFloat(route.distance).toFixed(1)} km</span><span class="imperial">${(parseFloat(route.distance) * 0.62).toFixed(1)} miles</span></li>
+                                <li><strong>Elevation:</strong> <span class="metric">${parseFloat(route.elevation).toFixed(1)} meters</span><span class="imperial">${(parseFloat(route.elevation) * 3.28).toFixed(1)} feet</span></li>
                                 <li><strong>Pace:</strong> ${route.pace}</li>
                                 <li><strong>Stop(s): </strong> ${route.stop}</li>
                                 <li><strong>Leader(s):</strong> ${route.leader}</li>

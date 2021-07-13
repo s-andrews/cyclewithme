@@ -67,6 +67,12 @@ a.signup {
     display: none
 }
 
+/* Hide imperial stuff unless they ask */
+.imperial {
+    display: none
+}
+
+
 /* A general hidden class to hide stuff */
 .hidden {
     display: none
@@ -92,6 +98,11 @@ a.signup {
 .invitealert {
     text-align: center;
     margin:0;
+}
+
+/* Add a bit of space below the imperial button */
+.toggleswitch {
+    margin-bottom: 1em;
 }
 
 .jumbotron {

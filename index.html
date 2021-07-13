@@ -10,6 +10,9 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+  <!-- Toggle switch cdn -->
+  <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+
   <!-- Our CSS -->
   <link rel="stylesheet" href="cyclewithme.css" crossorigin="anonymous">
 
@@ -28,7 +31,6 @@
       <span class="navbar-toggler-icon"></span>
     </button> -->
   </nav>
-
 
   <!-- Introduction information if they're not looking at an actual ride -->
 
@@ -86,6 +88,11 @@
         <h2 id="eventdate" class="display-5"></h2>
       </div>
     </div>
+
+    <div class="container toggleswitch">
+      <input id="metricimperialswitch" type="checkbox" checked data-toggle="toggle" data-on="Metric" data-off="Imperial" data-onstyle="secondary" data-offstyle="secondary">
+    </div>
+  
 
     <!-- Show the links to the event for users and admins -->
     <div class="adminonly container">
@@ -278,6 +285,9 @@
 
   <!-- JSCookie library -->
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+
+  <!-- Toggle switch JS -->
+  <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 
   <!-- Our custom js -->
   <script src="js/cyclewithme.js"></script>
