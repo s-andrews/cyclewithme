@@ -488,8 +488,6 @@ def get_stats_from_gpx(gpx_data):
             # Add any elevation change
             if this_elevation > last_elevation:
                 elevation += this_elevation - last_elevation
-                print(f"This {this_elevation:.2f} last {last_elevation:.2f} total {elevation:.2f}")
-
 
 
         last_lat = this_lat
