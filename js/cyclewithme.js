@@ -312,11 +312,11 @@ function get_ride() {
     }
     else {
         if (ride_id) {
-            $("#newrideinstructions").hide();
             update_ride(null);
         }
         else {
             $("#showevent").hide();
+            $("#newrideinstructions").show();
             populate_new_ride()
         }    
     }

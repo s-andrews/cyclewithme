@@ -72,6 +72,12 @@ a.signup {
     display: none
 }
 
+/* Hide new ride instructions until we know we want to see them */
+#newrideinstructions {
+    display: none
+}
+
+
 
 /* A general hidden class to hide stuff */
 .hidden {
