@@ -157,11 +157,12 @@ def add_edit_route(form):
                 if not isinstance(form['gpx'].value,str):
                     gpx_file = form["gpx"]
                     gpx = gpx_file.file.read().decode("UTF-8")
-                    lat,lon,distance = get_stats_from_gpx(gpx)
+                    lat,lon,distance, elevation = get_stats_from_gpx(gpx)
                     route["gpx"] = gpx
                     route["lat"] = str(lat)
                     route["lon"] = str(lon)
-                    route["distance"] = round(distance,1)
+                    route["distance"] = round(distance,3)
+                    route["elevation"] = round(elevation,3)
                 
                 break
 
@@ -178,7 +179,7 @@ def add_edit_route(form):
         gpx_file = form["gpx"]
         gpx = gpx_file.file.read().decode("UTF-8")
 
-        lat,lon,distance = get_stats_from_gpx(gpx)
+        lat,lon,distance,elevation = get_stats_from_gpx(gpx)
 
         new_route = {
                 "number": str(highest_route),
@@ -186,7 +187,8 @@ def add_edit_route(form):
                 "description" : form["description"].value,
                 "start_time": form["start"].value,
                 "departs": form["departs"].value,
-                "distance": round(distance,1),
+                "distance": round(distance,3),
+                "elevation": round(elevation,3),
                 "pace": form["pace"].value,
                 "stop": form["stop"].value,
                 "leader": form["leader"].value,
@@ -446,9 +448,19 @@ def get_stats_from_gpx(gpx_data):
 
     distance = 0
 
+    # Our elevation calculation is pretty crude.  We're just
+    # using the elevation markers in the GPS file, which isn't 
+    # ideal but is the best we can do without additional external
+    # information.
+    elevation = 0
+
+    last_elevation = 0
+
     for i,point in enumerate(points):
         this_lat = float(point.getAttribute("lat"))
         this_lon = float(point.getAttribute("lon"))
+        this_elevation = float(point.getElementsByTagName("ele")[0].firstChild.data)
+
 
         if i==0:
             lat_max = this_lat
@@ -472,20 +484,24 @@ def get_stats_from_gpx(gpx_data):
             a = 0.5 - cos((this_lat-last_lat)*p)/2 + cos(last_lat*p) * cos(this_lat*p) * (1-cos((this_lon-last_lon)*p))/2
             distance += 12742 * asin(sqrt(a))
 
+            
+            # Add any elevation change
+            if this_elevation > last_elevation:
+                elevation += this_elevation - last_elevation
+                print(f"This {this_elevation:.2f} last {last_elevation:.2f} total {elevation:.2f}")
+
+
 
         last_lat = this_lat
         last_lon = this_lon
-
+        last_elevation = this_elevation
 
 
     mid_lat = (lat_min+lat_max)/2
     mid_lon = (lon_min+lon_max)/2
 
-    # Convert distance from km to miles
-    distance *= 0.621
 
-
-    return(mid_lat,mid_lon,distance)
+    return(mid_lat,mid_lon,distance, elevation)
 
 
 
